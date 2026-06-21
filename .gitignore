@@ -1,0 +1,39 @@
+# Python cache and bytecode
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyo
+*.pyd
+
+# Environment files
+.env
+.env.*
+
+# SQLite database and instance data
+instance/
+*.db
+*.sqlite3
+
+# VS Code settings
+.vscode/
+
+# Distribution / packaging
+build/
+dist/
+*.egg-info/
+pip-wheel-metadata/
+
+# Logs
+*.log
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Editor temporary files
+*~
+*.swp
+*.tmp
+
+# System files
+Thumbs.db
+.DS_Store

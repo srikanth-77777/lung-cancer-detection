@@ -1,0 +1,26 @@
+% Abstract and Introduction Draft for Lung Cancer AI Diagnostic System
+
+\begin{abstract}
+Lung cancer remains a formidable global health challenge, necessitating not only high-accuracy detection but also precise classification of histological subtypes to guide personalized treatment. While deep learning has shown immense promise in automating radiological workflows, the clinical adoption of these models is often hampered by their "black-box" nature and the lack of human-interpretable evidence. This paper presents a multi-stage explainable diagnostic framework for lung cancer subtyping and malignancy detection in chest computed tomography (CT) scans. Our system employs a hierarchical architecture: a 4-class ResNet50-based classifier for subtype identification (Adenocarcinoma, Squamous Cell, Large Cell, and Normal tissue) and a secondary sector for binary malignancy assessment. To bridge the gap between algorithmic output and clinical trust, we integrate a dual-layer explainable AI (XAI) engine using Gradient-weighted Class Activation Mapping (Grad-CAM) and Local Interpretable Model-agnostic Explanations (LIME). The system achieves a classification accuracy of 95\% on subtyping, complemented by automated clinical narratives that localize nodules and provide histological context. Our results demonstrate that the synergy of hierarchical modeling and granular XAI can significantly enhance the reliability of AI-assisted oncology diagnostics.
+\end{abstract}
+
+\begin{IEEEkeywords}
+Lung Cancer, Chest CT, Deep Learning, ResNet50, Explainable AI (XAI), Grad-CAM, LIME, Clinical Diagnostics.
+\end{IEEEkeywords}
+
+\section{Introduction}
+
+\IEEEPARstart{L}{ung} cancer is the leading cause of cancer-related mortality worldwide, characterized by high heterogeneity and rapid progression if not diagnosed in its nascent stages. The transition from general diagnosis to precision medicine has made the identification of specific histological subtypes—primarily Adenocarcinoma and Squamous Cell Carcinoma—critical for determining therapeutic surgical interventions and chemotherapy regimens. Traditionally, this process relies on the exhaustive visual inspection of Computed Tomography (CT) scans by expert radiologists, a task that is increasingly burdensome given the rising volume of medical imaging and the subtle morphological variations between subtypes.
+
+In recent years, Convolutional Neural Networks (CNNs) have emerged as powerful tools for automating medical image analysis, often matching or exceeding human performance in localized detection tasks. However, the deployment of AI in critical healthcare environments faces a significant "transparency gap." Clinicians are understandably hesitant to rely on an automated diagnosis that does not provide a spatial or categorical justification for its output. Furthermore, many existing systems focus on simple binary detection (cancer vs. non-cancer), failing to provide the granular subtype classification necessary for comprehensive treatment planning.
+
+This paper proposes an integrated AI diagnostic system designed to address these limitations through a two-pronged approach. First, we implement a hierarchical classification pipeline that separates initial subtype categorization from malignancy assessment, ensuring that the feature extraction layers are optimized for the multi-class complexity of histological types. Second, we introduce a dual-modal interpretation engine. By combining Grad-CAM’s gradient-based localization with LIME’s superpixel-level perturbation analysis, our system provides a multifaceted view of the underlying diagnostic features. This interpretability is further enhanced by an automated narrative generator that translates spatial heatmaps into structured clinical notes, identifying lesion zones, size labels, and risk intensities. 
+
+The primary contributions of this work include:
+\begin{itemize}
+    \item A hierarchical ResNet50-based architecture achieving 95\% accuracy across four distinct lung CT categories.
+    \item A dual-layer XAI framework that facilitates clinical trust by providing both visual heatmaps and perturbation-based evidence.
+    \item An end-to-end web-based deployment pipeline that integrates AI inference with real-time clinical reporting and an assistive medical narrative engine.
+\end{itemize}
+
+Through this integrated framework, we aim to provide a scalable and interpretable tool that assists oncologists in reducing diagnostic latency while maintaining the highest standards of evidence-based medical practice.

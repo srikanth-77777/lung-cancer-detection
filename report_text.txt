@@ -1,0 +1,1962 @@
+=== PAGE 1 ===
+I   Lung Cancer Detection and Multi -Class Classification  
+Using CT Images with Explainable AI Diagnosis  
+ 
+21CSP302L - PROJECT   
+ 
+Submitted  by 
+ 
+B S VIKASHSRIKANTH  [RA23110260105 83] 
+ S RAVI PRAKASH  [RA23110260105 91] 
+ 
+Under  the Guidance  of 
+ 
+Dr. N Gopinath   
+ 
+Assisstant  Professor , Department of Computational Intelligence  
+ 
+in partial  fulfillment  of the requirements  for the degree  of 
+ 
+BACHELOR  OF TECHNOLOGY  
+in 
+COMPUTER SCIENCE ENGINEERING  
+with specialization in AIML  
+ 
+ 
+ 
+DEPARTMENT OF COMPUTATIONAL INTELLIGENCE 
+COLLEGE OF ENGINEERING AND  TECHNOLOGY  
+SRM  INSTITUTE  OF SCIENCE  AND  TECHNOLOGY  
+KATTANKULATHUR - 603 203 
+ 
+                                                                  MAY   2026
+
+
+=== PAGE 2 ===
+  
+Department  of Computational Intelligence  
+SRM Institute of Science & Technology  
+Own  Work  Declaration Form  
+ 
+ 
+ 
+Degree/  Course  : B.TECH/ CSE with specialization in  AIML  
+ 
+Student  Name  : B S VIKASHSRIKANTH , S RAVI PRAKASH  
+ 
+Registration  Number  : RA23110260105 83 , RA23110260105 91 
+ 
+               Title Work                             :  Lung Cancer Detection and Multi -Class Classification  
+                                                                              Using CT Images with Explainable AI Diagnosis  
+ 
+ 
+I / We hereby certify that this assessment compiles with the University’s Rules and Regulations  
+relating  to Academic  misconduct  and plagiarism,  as listed  in the University  Website,  Regulations,  
+and the Education Committee  guidelines.  
+ 
+I / We confirm that all the work contained in this assessment is my / our own except where  indicated,  
+and that  I / We  have  met the following  conditions:  
+ 
+ Clearly  referenced  / listed  all sources  as appro priate  
+ Referenced and  put in inverted  commas  all quoted  text (from  books,  web,  etc) 
+ Given  the sources  of all  pictures,  data etc.  that are  not my own 
+ Not made  any use of the report(s) or essay(s) of  any other  student(s)  either  past or present  
+ Acknowledged  in appropriate  places  any help that I have  received  from  others  (e.g. 
+fellow  students, technicians, statisticians, external  sources)  
+ Compiled  with any other  plagiarism  criteria  specified  in the Course  handbook  / University  
+website  
+I understand  that any false  claim  for this work  will be penalized  in accordance  with the 
+University  policies  and regulations.  
+ 
+DECLARATION:  
+We are aware of and understand the University’s policy on Academic misconduct and plagiarism and I  
+certify that this assessment is my / o ur own work, except where indicated by referring, and that I have  
+followed  the good academic practices noted above.  
+ 
+ 
+B S VIKASHSRIKANTH                                                             S RAVI PRAKASH  
+RA2311026010 583                                                                                            RA231102601059 1 
+ 
+ 
+ 
+ 
+ 
+ 
+ii 
+ 
+ 
+
+
+=== PAGE 3 ===
+  
+ 
+ 
+ 
+SRM  INSTITUTE OF  SCIENCE  AND  TECHNOLOGY  
+KATTANKULATHUR  – 603 203  
+ 
+BONAFIDE  CERTIFICATE  
+ 
+ 
+ 
+ 
+Certified that 21CSP302L  - Project report titled “ Lung  Cancer Detection 
+and Multi -Class Classification Using CT Images with Explainable AI 
+Diagnosis ” is the bonafide work of  “B S VIKASHSRIKANTH  [RA23110260105 83], S 
+RAVI PRAKASH  [RA23110260105 91]” who carried out the project work  under my 
+supervision. Certified further, that to the best of my knowledge the work 
+reported herein does not form any other project report or dissertation on the basis 
+of which a degree or award was conferred on an earlier occasion on this or any 
+other can didate.  
+ 
+ 
+ 
+ 
+                        
+                                                    
+SIGNATURE  
+Dr. N Gopinath  
+SUPERVISOR  
+Assistant   Professor  
+DEPARTMENT OF  
+COMPUTATIONAL INTELLIGENCE   SIGNATURE  
+DR. R. ANNIE UTHRA  
+PROFESSOR &  
+HEAD  
+DEPARTMENT OF  
+COMPUTATIONAL INTELLIGENCE  
+ 
+ 
+ 
+ 
+ 
+  
+ 
+ 
+               EXAMINER 1                                                                                            EXAMINER 2  
+              Name & Signature                 Name & Signature  
+ 
+ 
+ 
+ 
+ 
+iii 
+
+=== PAGE 4 ===
+  
+ 
+ 
+ACKNOWLEDGEMENTS  
+               
+We express our humble gratitude to Dr. C. Muthamizhchelvan , Vice -Chancellor, SRM Institute of 
+Science      and Technology, for the facilities extended for the project work and his continued support.  
+ 
+ We extend our sincere thanks to Dr. Leenus Jesu Martin M, Dean -CET, SRM Institute of Science 
+and Technology, for his invaluable support.  
+ 
+ We wish to thank Dr. Revathi Venkataraman , Professor and Chairperson, School of Computing, 
+SRM Institute of Science and Technology, for her support throughout the project work.  
+ 
+ We encompass our sincere thanks to,School of Computing and Dr.C. Lakshmi,  Professor and 
+Associate Chairperson -AI, School of Computing, SRM Institute of Science and Technology, for their 
+invaluable support.  
+ 
+ We are incredib ly grateful to our Head of the Department, Dr. R. Annie Uthra , Professor, 
+Department of Computational Intelligence , SRM Institute of Science and Technology, for her 
+suggestions and encouragement at all the stages of the project work.  
+ 
+We want to convey ou r thanks to our Project Coordinators, Panel Head, and Panel Members 
+Department of Computational Intelligence, SRM Institute of Science and Technology, for their inputs 
+during the project reviews and support.  
+  
+ We register our immeasurable thanks to our Fa culty Advisor, Dr. N. Kanimozhi , Department of 
+Computational Intelligence , SRM Institute of Science and Technology, for leading and helping us to 
+complete our course.  
+  
+Our inexpressible respect and thanks to our guide, Dr. N Gopinath , Department of  Computational 
+Intelligence ,  SRM Institute of Science and Technology, for providing us with an opportunity to 
+pursue our project under his / her mentorship. He / She provided us with the freedom and support to 
+explore the research topics of our interest. H is / Her passion for solving problems and making a 
+difference in the world has always been inspiring.  
+ 
+We sincerely thank all the staff members of  Computational Intelligence , School of Computing, 
+S.R.M Institute of Science and Technology, for their help during our project. Finally, we would like 
+to thank our parents, family members, and friends for their unconditional love, constant support and 
+encouragement  
+ 
+        
+             
+ 
+ 
+             Authors  
+iv 
+
+=== PAGE 5 ===
+  
+ 
+ 
+ABSTRACT  
+ 
+In the global picture, lung cancer remains the leading cause of mortality from cancers. While artificial 
+intelligence algorithms have shown immense promise when it comes to automatic image analyses in 
+medical imaging, the gap between their output and clini cians' confidence remains huge.Modern 
+solutions based on AI are often treated as black boxes since they give the classification results without 
+explanations related to categorization and geography of the occurrence. Also, not all models can give 
+the histol ogical subtype that is needed for proper treatment plans.This project proposes a multi -stage, 
+explainable AI approach to diagnosing subtypes of lung cancer and malignant tumors detected in 
+chest CT images. The proposed architecture is based on the ResNet50  model.Having achieved 95% 
+classification accuracy, Sector 1 classifies the nodules into four histological classes: adenocarcinoma, 
+squamous cell carcinoma, large cell carcinoma, and normal. On the other hand, Sector 2 uses a binary 
+malignancy classifier f or benign/malignant classification of each slice of nodules.An XAI engine with 
+two layers has been used in order to solve the problem of explainability. Although LIME can perform 
+complementary perturbation analysis on the superpixel level, Grad -CAM can cre ate visualizations of 
+activation regions of model predictions using localized heatmaps. A Dual -CAM layer has been added 
+to compare the activation of predicted class against that of the most active counter -class.A remarkable 
+aspect of the model is its Clini cal Narrative Engine, which automatically converts the activations into 
+clinical reports based on location.  
+  
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+                     
+                                                                                  v 
+
+=== PAGE 6 ===
+           
+          TABLE  OF CONTENTS  
+ABSTRACT                      v 
+ 
+TABLE OF CONTENTS                                vi 
+ 
+LIST  OF FIGURES                     viii 
+ 
+LIST OF TABLES                     ix 
+ 
+ABBREVIATIONS                                                                                      x 
+ 
+CHAPTER              TITLE              PAGE  
+NO.                      NO. 
+ 
+1 INTRODUCTION           
+1.1 Introduction to Project         1 
+1.2 Problem Statement  and Description                   1 
+1.3  Motivation           3 
+1.4 Sustainable Development Goal of the Project      4 
+2 LITERATURE  SURVEY          
+ 2.1 Overview of the Research Area         6 
+ 2.2 Existing Models and Frameworks        6 
+ 2.3 Limitations Identified from Literature Survey (Research Gaps)    7 
+      2.4 Research Objectives          8 
+ 2.5 Product Backlog (Key user stories with Desired outcomes)        9 
+      2.5 Plan of Acti on (Project Road Map)                                                                              9 
+  
+3   SPRINT PLANNING AND EXECTION METHODOLOGY     
+ 3.1 SPRINT I  [Image Preprocessing & Hierarchical Classification]  
+  3.1.1 Objectives with user stories of  Sprint I       11 
+  3.1.2 Functional Document         12 
+  3.1.3 Architecture Document         13 
+  3.1.4 Outcome of objectives/ Result Analysis       24 
+  3.1.5 Sprint Retrospective         15   
+ 
+ 
+vi 
+ 
+ 
+ 
+ 
+
+=== PAGE 7 ===
+  
+ 
+ 
+3.2 SPRINT II   [XAI Integration & Clinical Narrative  Engine]                              
+  3.2.1 Objectives with user stories of Sprint II      16 
+  3.2.2 Functional Document         17 
+  3.2.3 Architecture Document         18 
+  3.2.4 Outcome of objectives/ Result Analysis       18 
+  3.2.5 Sprint Retrospective         19 
+ 
+4    RESULTS AND DISCUSSIONS         
+ 4.1 Project Outcomes (Performance Evaluation )                                                             20  
+                  4.2 Image Preprocessing Evaluation  22 
+ 4.3 Validation of Grad -CAM Explainability  23 
+ 4.4   LIME Analysis evaluation  24 
+ 4.5 AI narrative engine  26 
+5    CONCLUSION AND FUTURE ENHANCEMENT      27 
+REFERENCES           30 
+APPENDIX            31 
+ A  CODING            31 
+ B JOURNAL DETAILS                     36 
+ C  PLAGIARISM REPORT         37 
+D   AI REPORT                                                                                                                    38 
+E PUBLICATION DETAILS                                                     39  
+               
+ 
+ 
+ 
+ 
+vii 
+ 
+
+=== PAGE 8 ===
+  
+   LIST  OF FIGURES   
+CHAPTER     TITLE              PAGE  
+NO.                      NO. 
+ 
+1.1 System Architecture — Hierarchical Lung Diagnostic Pipeline . . . . . . . . . .                        3  
+1.2 In Deep Pipeline of System Architecture . . . . . . . . . .                                                      5 
+2.1 A normal CT scanned Image   . . . . . . . . . .                                                                             7 
+2.2 Image Preprocessing Pipeline (Median Blur → CLAHE → Morphology) . . . . . . .              8                                            
+3.1 Training and Validation Accuracy for Sector 1 Subtype Classification . . . .           14  
+3.2 Accuracy metrics for Sector 2 Malignancy Detection using the LIDC -IDRI . . . . .. 19 
+4.1 System Implementation Screenshot showing Subtype Identificatio n. . . . .               30 
+4.2 from a normal ct image to gead cam observed ct image . . . . . . . . . .                           25 
+4.3 Web Dashboard — Sector 2 (Malignancy Detection) . . . . . . . . . .                                      26 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+viii 
+
+=== PAGE 9 ===
+  
+ 
+LIST  OF TABLES  
+ 
+ 
+CHAPTER     TITLE               PAGE  
+                      NO.                      NO.  
+  
+3.1 Sprint I Functional Test Cases . . . . . . . . . .                                                                12 
+3.2 Sprint I Classification Metrics . . . . . . . . . .                                                                14 
+3.3 Sprint I Retr ospective . . . . . . . . . .                                                                             15 
+3.4         Overall recal and f1 score . . . . .                                                                                15 
+3.5 Sprint II Fu nctional Test Cases . . . . . . . . . .                                                              17 
+3.6 Sprint II Retrospective . . . . . . . . . .                                                                           19 
+4.1 Per-Class Performance — Sector 1 (4 -Class Classifier) . . . .                       20 
+4.2 Heatmap Analysis — Sample Results  . . . . . . . . . .                                          24 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ix 
+ 
+ 
+ 
+
+=== PAGE 10 ===
+  
+ 
+ 
+ABBREVIATIONS  
+ 
+ 
+CT  Computed Tomography  
+CNN   Convolutional  Neural Network  
+ResNet   Residual Network  
+XAI  Explainable Artificial Intelligence  
+Grad -CAM  Gradient -weighted Class Activation Mapping  
+LIME   Local Interpretable Model -agnostic Explanations  
+CLAHE  Contrast Limited Adaptive Histogram Equalization  
+LIDC -IDRI  Lung Image Database Consortium and Image Database Resource Initiative  
+NSCLC  Non-Small Cell Lung Cancer  
+VATS   Video -Assisted Thoracoscopic Surgery  
+PET   Positron Emission Tomography  
+SVC   Superior Vena Cava  
+EGFR   Epidermal Growth Factor Receptor  
+ALK   Anaplastic Lymphoma Kinase  
+PD-L1  Programmed Death -Ligand 1  
+SMOTE  Synthetic Minority Oversampling Technique  
+API  Application Programming Interface  
+GPU   Graphics Processing Unit  
+CUDA   Compute Unified Device Architecture  
+  
+
+=== PAGE 11 ===
+  
+ 
+CHAPTER  1 
+INTRODUCTION  
+ 
+ 
+1.1 Introduction to Project  
+Cancer of the lungs is the most frequent cause of death from cancer in the world, and should the 
+disease not be detected in its early stages, it is known to develop rapidly because of its high level of 
+heterogeneity. It is important today to identi fy specific subtypes of the disease in order to determine 
+what kind of treatment options to apply, since there has been a change in diagnosis from a general 
+one to precision medicine. This has always involved an analysis of the images from the CT scan of 
+the lungs through careful visual inspection by the radiologist, which has become increasingly difficult 
+due to the increase in medical imaging.  
+In recent times, CNNs have been used as effective models for automatically performing analyses of 
+medical images and even outperforming humans in terms of localized detection capabilities. 
+However, there is still the issue of lack of transparency when using AI in such an important field like 
+healthcare. It would be difficult to use an automated diagnosis tool when on e cannot explain where it 
+got the results from, especially because they might be concerned about the source of the findings. 
+Additionally, current AI models tend to be binary in their predictions, which limits their scope.  
+In view of overcoming these limit ations, this paper recommends an integrated two -tier approach for 
+the AI diagnostic solution proposed here. Firstly, we implement ResNet50 in the formation of a 
+hierarchical classifier to classify sub -type categorization and malignancy assessment. Secondly , a 
+dual modal explainable mechanism comprising both LIME and Grad -CAM is put forth as the second 
+tier. The dual modal model has been enhanced by automating the clinical narrative generator for zone -
+wise diagnosis.  
+ 
+1.2 Problem Statement and Description  
+There are three main problems associated with modern AI lung cancer diagnosis technologies: first, 
+these systems operate like "black boxes," not providing textual or graphical explanations for their 
+diagnoses; second, they can only provide a binary decision abou t whether there is cancer or no cancer, 
+lacking an ability to conduct histological subtyping; and third, they cannot generate any meaningful 
+reports with reference to anatomical regions.  
+ 
+ 
+1 
+
+=== PAGE 12 ===
+  
+ 
+This technique can overcome the shortcomings stated above throu gh the introduction of a multiple -
+stage classification system that utilizes the concept of bi -modal explainability. In the first sector, the 
+utilization of ResNet50 to achieve an accuracy level of 95% across four categories of histology 
+subtypes (Adenocarc inoma, Squamous Cell, Large Cell, Normal) is used. The second sector utilizes 
+the binary classifier for detecting whether the image is benign or malignant.  
+With regard to anatomical zones, these systems are not capable of providing any meaningful output. 
+In conventional radiological assessment, the diagnosis is made by analyzing the findings in terms of 
+the following anatomical zones: upper lobe, middle lobe, lower lobe, hilar zone, mediastinal area, and 
+pleura. The referring physician is able to schedule surgery, follow up on the progress of the disease, 
+and correlate imaging findings with patient symptoms because of this information based on 
+anatomical zones. It becomes difficult for the physician to integrate the AI -based analysis into his 
+reporting proc ess due to the mismatch of these two approaches.  
+In this regard, this paper proposes a multi -level classification algorithm that exploits the concept of 
+bi-modal explainability in order to address the above -stated limitations. The first layer of the model 
+is based on ResNet50 architecture, which is trained using ImageNet weights, and the images obtained 
+from the database of histopathology images are used to train the network. It should be noted that there 
+are four types of histological subtypes, namely Aden ocarcinoma, Squamous Cell Carcinoma, Large 
+Cell Carcinoma, and Normal. In addition, it is possible to achieve a 95% accuracy rate by using the 
+training images. The binary classifier is implemented in the second phase to differentiate between 
+benign and mal ignant conditions.  
+Whereas the treatment for squamous cell carcinoma will include immunotherapy by using drugs such 
+as pembrolizumab, the diagnosis of adenocarcinoma will require tests for EGFR mutations in addition 
+to the use of drugs like erlotinib and g efitinib in its treatment. In case of such a misdiagnosis or lack 
+of classification of the cancer, there will be chances of incorrect medication, poor efficiency of the 
+drug, and adverse effects for the patient. For this reason, it can be argued that “the “cancer versus 
+non-cancer” approach is not sufficient.”  
+ 
+ 
+ 
+ 
+ 
+ 
+2 
+
+=== PAGE 13 ===
+  
+ 
+ 
+Fig.1.1 System Architecture — Hierarchical Lung Diagnostic Pipeline  
+ 
+1.3 Motivation  
+The widespread incidence of lung cancer throughout the world and the urgent requirement for an AI 
+solution that physicians would trust are the two major reasons motivating this project. About 2.2 
+million cases of lung cancer are discovered worldwide annual ly; however, if the cancer is not detected 
+early and classified correctly, then the probability of surviving the condition within five years is 
+dramatically reduced. Three factors primarily motivate this research project. Firstly, treatment 
+efficacy is grea tly affected by the early and accurate classification of the histology of lung cancer, 
+whereby treatment is required to be customized based on the type of cancer.  
+Secondly, it is extremely tiring to review hundreds of CT slices daily. The use of both LIME and 
+Grad -CAM within this project addresses this need perfectly as it provides the clinicians with analyses 
+and visualizations that they can review and depend upon.Fourthly, there is a significant incentive for 
+adopting this technology as it promises to mak e expert diagnostic expertise accessible to anyone.  
+ 
+ 
+ 
+3 
+
+
+=== PAGE 14 ===
+  
+ 
+Access to professional thoracic radiologists is severely limited in many poor countries. An online 
+platform for an explainable AI diagnostic system would enable remote and disadvantaged hospitals 
+to have access to specialist -level diagnostic expertise and save those who may not live to tell the tale 
+because of misdiagnosis.  
+ 
+1.4 Sustainable Development Goal of the Project  
+The third goal set out by the United Nations for sustainable development, "Good Health and Well -
+being," is directly affected by this project. Through this technology, it aims to reduce mortality and 
+save lives using a tool based on artificial intelligence that helps diagnose and subtype lung cancer 
+earlier and with more precision. The  ability to be explained and trusted makes this technology more 
+accessible for use in constrained clinical environments.  
+The effect of this research has direct bearing on Goal 3, also called "Good Health and Well -being," 
+out of the United Nations' Sustaina ble Development Goals. The targets of Goal 3 include reducing 
+premature mortality rates from NCDs by one -third by means of prevention and treatment until 2030 
+(Target 3.4). This goal aims to offer individuals good health habits and well -being at all stages  in 
+their lives. Target 3.4 includes emphasis on one of the most widespread forms of NCDs, namely, lung 
+cancer. Due to the use of artificial intelligence techniques to detect and classify lung cancer early, 
+this task will achieve its objective successfully . 
+Moreover, such an approach also meets the goals outlined under SDG Target 3.8, which aims at 
+achieving universal health coverage, including ensuring access to essential medicines and vaccines 
+that are safe, effective, and affordable. This project ensures  that high -end diagnostic services using 
+the latest AI technology can be offered even in poorly equipped clinical settings without access to 
+expensive diagnostic applications and hardware infrastructures by making the diagnostic solution 
+accessible via web -based applications through web browsers.   
+Furthermore, the proposed project is consistent with SDG Target 3.b, which focuses on the research 
+and development of vaccines and medicines for both communicable and non -communicable diseases 
+prevalent among deve loping countries.  The implementation of this technology will be simpler for 
+restricted clinical application because of its reliability and explainability . 
+ 
+ 
+ 
+4 
+ 
+
+=== PAGE 15 ===
+  
+ 
+ 
+ 
+Fig.1.2 In Deep Pipeline of System Architecture  
+ 
+ The double modality approach of explainability brings together the high level of capability of AI and 
+practical use by making sure that even physicians with no familiarity in AI technology can understand, 
+evaluate and take appropriate action based on the AI diagnostic suggestions. In this paper, a two -tier 
+approach for the proposed AI diagnostic solution has been recommended in order to deal with the 
+limitations. Firstly, ResNet50 model is used to develop a hierarchical classifier in order to classify 
+subtype and malignancy. Due to the usage of skip connections to resolve vanishing gradient problems, 
+50-layer deep learning framework becomes possible.  
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+  
+5 
+ 
+
+
+=== PAGE 16 ===
+  
+ 
+CHAPTER  2 
+LITERATURE SURVEY  
+ 
+2.1  Overview of the Research Area  
+During the last decade, image classification in medicine using deep learning has seen rapid progress. 
+CNNs were initially applied for finding lung nodules where the problem is considered to be binary, 
+whether the nodule is cancerous or not. The results obt ained by models like VGG -16 and AlexNet 
+have proven that detection can be automated while achieving performance comparable to that of 
+novice radiologists.  
+With growing expertise in this field, the two key directions were established. Firstly, transfer lear ning 
+using the ImageNet pretrained architectures like ResNet, DenseNet, and EfficientNet resulted in 
+superior results on small -scale medical datasets thanks to the ability of these networks to learn feature 
+representation based on a large dataset of millio ns of natural images. Secondly, a shift to more 
+clinically useful task was made: differentiating between histological subtypes such as 
+Adenocarcinoma, Squamous Cell Carcinoma, and Large Cell Carcinoma rather than a simple binary 
+detection task. In parallel to developing classification methods, Explainable AI techniques such as 
+Grad -CAM, SHAP, and LIME were created in order to generate explanations behind each decision 
+made by the network. Nevertheless, the majority of approaches utilize just one particular X AI 
+technique and fail to create clinical context out of its output.  
+ 
+2.2  Existing Models and Frameworks  
+The following architectures are well -known in the sphere of lung cancer diagnosis:  
+Classification of lung nodules using LIDC -IDRI data set via VGG -16 and ResNet is widely applied 
+and demonstrated 85 -92% accuracy in binary problems. But these models offer almost no 
+explainability but through confidence level calculation and do not perform subtypes separation.The 
+DenseNet201 architecture, due to the dense con nections of neurons, which were claimed to keep 
+detailed characteristics, was chosen after numerous studies proved higher results for multi -class 
+problem solutions in CT images of lungs.  
+ 
+6 
+
+=== PAGE 17 ===
+  
+ Yet the problem of training instability and overfitting with med ical images of a relatively low 
+quantity remained. To combine high performance with efficient computing, the EfficientNet 
+architecture was suggested. But the method of compound scaling that made the architecture of the 
+EfficientNet possible is not ideal for  medical CT images due to the latter's nature. Since it is common 
+that fine -tuned models are better than those trained from scratch, transfer learning using ImageNet 
+pre-trained networks is considered standard practice today. The novel technique involves us ing the 
+existing layers as feature extraction layers, but by replacing the last layer of the network with a new 
+classifier, the model can customize itself for this specific task.  
+ 
+     Fig.2.1 A normal CT scanned Image  
+ 
+2.3  Limitations Identified from Litera ture Survey (Research Gaps)  
+First, almost all of the current applications are single task -oriented. In the hierarchical pipeline that 
+mimics the actual clinical decision -making process, they perform either binary classification or multi -
+classification subt yping but not both.Second, explainability is usually an add -on. Most current 
+applications only deploy one explainable AI technology, which is Grad -CAM; moreover, the heatmap 
+generated is bare of any clinical explanation. In other words, there is not yet an y application that 
+combines LIME, which is the perturbation -based technology, and Grad -CAM, which is the gradient -
+based method.Lastly, narrative generation has yet to be automated. The expert's interpretation is still 
+needed to explain the most advanced XA I visualization technologies.  
+ 
+7 
+ 
+
+
+=== PAGE 18 ===
+  
+The heatmap activations have yet to be transformed into clinical notes that contain location -based 
+symptoms, proposed procedures, and treatment options.  Finally, there is poor treatment of class 
+imbalance within medical data sets. Biases towards majority classes within models arise due to the 
+inability of current augmentation techniques to account for feature variance within rare subtypes, such 
+as Large Ce ll Carcinoma.Secondly, there is inadequate consideration of deployment. Without a 
+complete process for deploying AI on web -based platforms that includes explainability and inference, 
+most research will remain Jupyter notebooks.   
+ 
+Fig.2.2 Image Preprocessing Pipeline (Median Blur → CLAHE → Morphology)  
+ 
+2.4  Research Objectives  
+• Develop a hierarchy -based classification model using ResNet50 architecture with ≥95% accuracy 
+in four classes histological subtyping.  
+• Use a two -layer approach for model int erpretability in the form of Grad -CAM and LIME.  
+• Develop a smart clinical narrative generation engine producing location -specific diagnostics for 
+eight anatomical locations.  
+• Deploy the complete system as a web -based application that can be used in produ ction and offers 
+real-time inference.  
+8 
+ 
+
+
+=== PAGE 19 ===
+  
+2.5  Product Backlog (Key user stories with Desired outcomes)  
+As such, with explainability embedded throughout, the product backlog consisted of a hierarchical 
+diagnostic approach, which would take a general histological subtyping to malignancy 
+classification.Four key modules make up the architecture of this project:  (1) Image Preprocessing and 
+Enhancement; (2) Multiclass Classification of Subtypes via ResNet50; (3) Binary Classification for the 
+Detection of Malignancies via another ResNet50; and (4) Two -level Explainable AI Synthesis through 
+Grad -CAM and LIME.  
+Each o f these modules were designed and built over two iterations of sprints.The use of two different 
+ResNet50 classifiers rather than one multi -task classifier is an essential architectural decision. This 
+helps circumvent the inevitable trade -off between multip le tasks in multi -task learning approaches with 
+a shared backbone architecture.Consequently, with the implementation of explainability throughout, 
+the product backlog was comprised of a diagnostic approach in a hierarchical manner, beginning with 
+a histolo gical subtyping towards malignancy classification.  One of the design considerations taken into 
+account is using two distinct ResNet50 models instead of a unified multi -task model. This ensures that 
+both models can fine -tune their feature extraction accordi ng to their respective tasks and therefore 
+avoid the inevitable loss of efficiency seen in multi -tasking models.  
+2.6  Plan of Action (Project Road Map)  
+Sprint I: Hierarchical Classification Engine and Image Preprocessing  
+• Implement image preprocessing pipeline for CT scans (Median Blur, CLAHE, Morphology).  
+• Train the ResNet50 4 -class subtype classifier model using Kaggle Chest CT data set (target: 95%).  
+• Train the ResNet50 binary classifier using LIDC -IDRI dataset.  
+• Design a Flask backend with APIs f or prediction tasks.  
+• Develop a web dashboard with a dark UI theme having zones for uploading images and result 
+presentation.  
+Preprocessing Pipeline for CT Scan Images  
+The images obtained from CT scans are preprocessed before being used as input for train ing and 
+testing of classifiers. The process has three main steps:  
+ 
+ 
+9 
+ 
+
+=== PAGE 20 ===
+  
+The image is blurred using median blurring without destroying the edges of the image. The filter used 
+for median blurring is either 3x3 or 5x5 kernels depending on the resolution of the image since 
+anatomical information should not be destroyed when identifying nodules.  
+The contrast of the lung regions having low densities is enhanced and over enhancement avoided at 
+high-density regions through CLAHE which applies operations on the lo cal image tiles rather than 
+performing global operations. The adjustable parameters in CLAHE include clipping limit (clip=2.0) 
+and grid size (grid=8×8).  
+Sprint II: Clinical Narrative Engine and XAI Integration  
+• Perform comparison using Dual -CAM to apply G rad-CAM (comparison between predicted vs. 
+counter class).  
+• Apply the LIME superpixel model -based explanation on both models.  
+• Develop a Heatmap engine having eight zones for analysis (distribution, size, morphology, and 
+position).  
+• Develop a clinical na rrative engine with nine different reports having nine different narratives.  
+• Incorporate the Medical Chatbot and Artificial Intelligence reasoner for generating AI narrative.  
+• Develop a summary report page that can be saved and printed.   
+Dual -CAM: Compa rative Analysis between Grad -CAM (Predicted vs. Counter Class)  
+While conventional Grad -CAM only shows activation for the predicted class, Dual -CAM extends this 
+approach through the generation of two maps:  
+• Primary CAM: The map showing activation for the predicted class to illustrate what the network 
+used while deciding on the decision.  
+• Counter CAM: The activation map showing what could have been the alternative option (highest 
+probability among others).  
+It is easier for medical practitioners to identify  decision boundaries with such a comparative analysis. 
+This is achieved by running the backward pass twice and overlaying the results on the original image 
+with a diverging color map.  
+ 
+ 
+ 
+ 
+10 
+ 
+
+=== PAGE 21 ===
+  
+CHAPTER  3 
+SPRINT PLANNING AND EXECTION METHODOLOGY  
+3.1 SPRINT I : Core Infrastructure & Threat Detection Engine  
+3.1.1  Objectives with User Stories of Sprint I  
+Task objective : Develop an end -to-end pipeline to perform binary classification of malignancy, 
+preprocess raw images, classify into four subtypes using histology (accuracy >= 95%), and present 
+results through a Flask online interface.  
+User stories:  
+• Story 1:  Image Preprocessing Pipeline: To ensure consistency in the features obtained from 
+different CT scanning devices, offer a preprocessing pipeline including median blur (k=3), global 
+histogram equalization, contrast -limited adaptive histogram equalization (c lipLimit=2.0, 
+tileGridSize=8×8), and morphological operations.  
+• Story 2:  4-Class Subtype Classifier: To classify adenocarcinoma, squamous cell carcinoma, large 
+cell carcinoma, and normal tissues, design a ResNet50 neural network classifier customized for 4 
+output classes by FC layers (2048→512→4, dropout rate=0.5) using the Kaggle Chest CT data set. 
+Target: Accuracy = 95% to handle class imbalance.  
+• Story 3:  Binary Malignancy Detector: Build the second model using ResNet50 architecture to 
+perform the Beni gn/Malignant classification task with the help of the LIDC -IDRI dataset. In this 
+architecture, an additional head FC 2048 ->512 ->128 ->2 and Dropout 0.4/0.3 will be added. Pre -
+trained weights for this model will be extracted from ImageNet V2.  
+• Story 4 : Flas k Backend & API Architecture: Build a simple Flask backend and API with binary 
+analysis endpoint /analyze/binary, four -class analysis endpoint /analyze/fourclass, and a main 
+endpoint /. It will also incorporate GPU auto -detection mechanism using CUDA/CPU a lternative 
+mechanism.  
+• Story 5:  Web Dashboard Architecture: Build an advanced -level web dashboard with a dark theme 
+design, supporting drag -and-drop images upload feature, having two sectors on the sidebar named as 
+Sector 1 and Sector 2, real -time analysi s with loading animations and results displaying, including 
+probability bars and image gallery.  
+ 
+ 
+ 
+11 
+ 
+
+=== PAGE 22 ===
+ 3.1.2 Functional Document (Functional Test Cases)  
+For Sprint I, I observed the execution of the first step of image classification process. The current 
+architecture can accept CT Scan images through the web interface; preprocess these images using six 
+steps; pass it to two ResNet50 models; and then perform additional processing of the output. Sector 
+1 classifies the image using the confidence score into a ny one of the four histological subtypes. On 
+the other hand, Sector 2 processes the image using nodule slices to detect the presence of malignancy.  
+The web application displays original image, enhanced image, classification output, and probability 
+distribu tion in tabular form; enables drag -and-drop image uploading; and ensures that inference time 
+does not exceed one second as model weight is loaded at start -up. 
+All functionalities have been tested using the test cases below.  
+ 
+ 
+Feature  Test Case  Steps to 
+Execute  Expected 
+Output  Actual Output  Status  
+4-Class 
+Classification  To Classify and 
+vary the sizes of 
+cancer cells  Upload cancer 
+cells chest CT 
+image to 
+Sector 1.  Model predicts 
+cancer cells 
+with 90% 
+accuracy.  Predicted 
+Adenocarcinoma 
+at 94.2% 
+confidence.  Pass 
+Binary 
+Detection  Detect malignant 
+or benign nodules  Upload LIDC -
+IDRI focused 
+nodule s to 
+Sector 2.  Model predicts 
+Malignant 
+with 8 0% 
+accuracy.  Predicted 
+Malignant at 
+91.7% 
+confidence.  Pass 
+Image 
+Preprocessing  CLAHE /histogram 
+equalization  
+enhancement  
+quality  Submit low -
+contrast CT 
+scan and get 
+enhanced 
+output.  Enhanced 
+image shows 
+improved 
+image contrast.  CLAHE + 
+Morphology 
+produced clear 
+tissue 
+boundaries.  Pass 
+GPU 
+Detection  CUDA device 
+auto-selection  Start server on 
+local host.  System detects 
+and uses 
+CUDA for 
+inference.  Device: cuda — 
+GPU inference 
+active.  Pass 
+Web Upload  Drag -and-drop  
+CT image  Drag PNG file 
+onto upload in 
+browser  to 
+check and get 
+output  Preview strip 
+shows file 
+name, size, 
+and thumbnail.  File accepted; 
+preview 
+displayed 
+correctly.  Pass 
+AI Diagnosis  Classify normal 
+tissue scan  Narrative AI 
+automatically 
+explains 
+about the 
+output  A paragraph 
+about the 
+cancer cell will 
+be displayed  Predicted 
+Normal at 
+97.1% 
+confidence.  Pass 
+ 
+Table 3.1: Sprint I Functional Test Cases  
+ 
+ 
+ 
+ 
+ 
+12 
+
+=== PAGE 23 ===
+  
+ 
+3.1.3  Architecture Document  
+Sprint I is designed based on a modular, hierarchical architecture and uses a Python Flask back -end. 
+This architecture comprises the following components:  
+Back -End (Flask):  
+This framework manages the HTTP requests and response generation via its internal routing. Flask 
+uses Jinja2 templates for the dashboard and generates the API for analyzing images, namely 
+/analyze/fourclass and /analyze/binary endpoints. The maximum file s ize limit for the server's 
+multipart form data is set to 16 MB.  
+Deep Learning Layer:  
+At the launch of the application, two ResNet50 networks are initialized within the memory. The four -
+class subtype model uses the head network (2048→512→4), which was learn ed from scratch with 
+Kaggle Chest CT data. The binary classification model applies the head network 
+(2048→512→128→2) based on the ImageNet V2 pretrained weights with LIDC -IDRI data. These 
+models were developed within the PyTorch and Torchvision libraries.  
+Image Pre -processing Layer:  
+Every image pre -processing process is carried out using OpenCV. Raw images are first converted 
+from bytes to grayscale, resized to 224x224 pixels, applied median blur, global histogram 
+equalization, CLAHE, and finally morphologi cal opening and closing operations. Applying 
+ImageNet mean and standard deviation statistics, the enhanced grayscale image is replicated to form 
+an RGB stack and normalized.  
+Front -end Layer:  
+This one -page web application was built using HTML5, CSS3, and Ja vaScript. Fonts such as Space 
+Grotesk and JetBrains Mono are used for the dark theme interface design. The website layout consists 
+of a content div element with CSS transitions and an always -present sidebar with a width of 240 
+pixels for browsing through s ectors.  
+ 
+ 
+ 
+13 
+ 
+
+=== PAGE 24 ===
+  
+ 
+3.1.4  Outcome of Objectives / Result Analysis  
+After applying the SMOTE algorithm training procedure in the feature space to tackle the problem of 
+imbalanced classes in Large Cell Carcinoma classification, the 4 -class subtype classification model 
+showed the best accuracy of 95% in Kaggle Chest CT test dataset validation. In turn, the binary 
+malignancy classification model demonstrated its optimal performance when relying on the 
+pretrained ImageNet V2 architecture, which feature d good capability in extracting fine details from 
+nodules.  
+ 
+ 
+Model  Task  Accuracy  Architecture  Inference Time  
+ResNet50 (Sector 
+1) 4-Class Subtype 
+Classification  95.0%  ResNet50 + 
+FC(512→4)  <1.0s per CT slice  
+ResNet50 (Sector 
+2) Binary 
+Malignancy 
+Detection  ~92%  ResNet50 + 
+FC(512→128→2)  <0.8s per CT slice  
+ 
+Table 3.2: Sprint I Classification Performance  
+ 
+ 
+ 
+Fig.3.1 Training and Validation Accuracy for Sector 1 Subtype Classification  
+(95% peak accuracy).  
+ 
+ 
+ 
+ 
+ 
+ 
+14 
+ 
+
+
+=== PAGE 25 ===
+  
+ 
+3.1.5  Sprint Retrospective  
+ 
+ 
+What Went Well  What Went Poorly  Ideas / Improvements  Actions Taken  
+ResNet50 proved 
+superior compared to 
+DenseNet201 and 
+EfficientNet models that 
+were tried out earlier, 
+reaching 95% accuracy.  
+ Incompatibility in the 
+design of the 
+architecture led to 
+inconsistent 
+performance on 
+grayscale CT images.  
+ Use ResNet50 to 
+leverage the deep 
+residual connection 
+capabilities in both 
+cases.  
+ ResNet50 was selected 
+over EfficientNetB0 for 
+inference in both 
+sectors.  
+SMOTE oversampling 
+was applied.  
+ 
+Model certainty and 
+clarity o f tissue 
+contours significantly 
+improved due to 
+CLAHE preprocessing.  The model favored 
+adenocarcinoma 
+because of the major 
+class imbalance 
+between large cell 
+carcinoma and 
+adenocarcinoma.  
+ Oversampling of the 
+minority class can be 
+done using SMOTE on 
+augme nted features.  
+ The efficiency and low 
+eye strain thanks to the 
+dark theme were 
+highlighted positively 
+by users of the 
+interface.  
+ 
+Dark -themed UI always 
+been using in medical 
+field for less eye strain.  Freezing of the 
+interface while running 
+inference happened 
+because of synchronous 
+processing of uploaded 
+images.  
+ Make the process of 
+image uploading 
+asynchronous with 
+loading spinners on the 
+interface.  
+ Added  JavaScript fetch 
+with CSS spinner 
+animations for both 
+sectors to handle the 
+uniqueness od UI.  
+ 
+Table 3 .3: Sprint I Retrospective  
+ 
+ 
+ 
+                          
+ 
+Table 3. 4: overall recall and f1 score  
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+15 
+ 
+
+
+=== PAGE 26 ===
+  
+ 
+ 
+3.2 SPRINT II: AI Intelligence & Real -Time Dashboard  
+3.2.1  Objectives with User Stories of Sprint II : 
+The goal is to include comprehensive explanations provided by an explainable AI system, including 
+dual-CAM comparison, LIME analysis on superpixels, heatmaps using Grad -CAM, automatic 
+generation of a clinical narrative with 96 location -specific reports, an d a context -aware medical 
+chatbot.  
+ 
+User Stories:  
+• User Story 1:  Grad -CAM Heatmaps Generator: Generate activations and compute gradients by 
+attaching a hook in the fourth layer of ResNet50 to produce a Grad -CAM map. Create 224x224 
+heatmaps normalized to v isualize the most worrisome zones using JET coloring (alpha=0.4).  
+• User Story 2:  Dual -CAM Comparison: Visualize the reasons why a specific diagnosis (diagnosis 
+A) was preferred over another one (diagnosis B) in generating the heatmaps. • Story 8: Real -Time  
+Streaming & UI Dashboard - Create a React SPA with Server -Sent Events streaming to give the 
+analyst live attack alerts and visual severity indicators within 200ms of detection.  
+• User Story 3: Heatmap Engine based on 8 Zones: Analyze  the anatomical location (8 -zone matrix), 
+the size (Small/Medium/Large), the shape based on circularity (Rounded/Oval/Irregular), the 
+intensity (High/Moderate/Low), and the dispersion (Localized/Bilateral/Diffuse) by performing 
+connected component analysis  through Grad -CAM activation map.  
+• User Story 4 : Clinical Narrative Engine: Develop an extensive system for documenting clinical 
+cases with 96 different reports (malignant × 8 zones + cancer subtype × 8 zones × 4 categories). For 
+each report there is eigh t symptoms, five diagnostic follow -ups, five treatment choices, and location -
+specific analysis.  
+• User Story 5:  LIME Superpixels Explainer: Employ the lime_image framework for segmentation 
+using Quickshift with 100 samples to determine the superpixel contr ibution to perform Local 
+Interpretable Model -agnostic Explanations.  
+• User Story 6:  AI Chatbot for Medicine: Develop a contextual chatbot capable of answering 
+diagnostic questions associated with the images after analysis done on both fields.  
+ 
+ 
+ 
+ 
+16 
+ 
+
+=== PAGE 27 ===
+  
+ 
+3.2.2 Functional Document (Functional Test Cases)  
+The whole explainability pipeline was part of Sprint II. Nowadays, the software produces Dual -CAM 
+visualizations showing the comparison of the predicted and counter class, Grad -CAM visualizations 
+that show attention locations, LIME visualizations indicating superpixels that favor or refute the 
+finding, as well as clinical notes generated automatically containing location -based symptoms, 
+actions to take next, and treatments.  The whole point of sprint 2 is only of lime and explainable 
+features, these unique and new gen fratures are using in day to day applications and many machine 
+learning projects.  
+ 
+Feature  Test Case  Steps to 
+Execute  Expected 
+Output  Actual Output  Status  
+Grad -CAM  Used to 
+Generate 
+heatmap for 
+binary 
+prediction  Upload cancer 
+cell CT; check  
+heatmap  with 
+boundary 
+appears.  Heatmap 
+highlights 
+suspicious 
+found in 
+nodule region.  Heatmap correctly 
+located to upper 
+right lobe.  Pass 
+Dual -CAM  Compare 
+predicted vs 
+actual  class Analyse the 
+CT scan; 
+check for dual 
+heatmap 
+display.  Two side -by-
+side heatmaps 
+with different  
+patterns.  Predicted CAM 
+showed focal mass  
+and others works as 
+same Pass 
+LIME  Generate 
+superpixel 
+explanation  Click 'Run 
+LIME 
+Analysis' after 
+classif ication.  Positive and 
+narrative 
+generated 
+within 5 
+seconds.  LIME identified 
+14.2% positive 
+superpixels in upper 
+left. Pass 
+Clinical Notes  check  zone -
+specific 
+reports  Upload 
+Squamous Cell 
+CT with any 
+side activation.  Clinical notes 
+show Right 
+Upper Lobe 
+specific data.  Correct zone 
+detected; 
+symptoms/treatments 
+matched.  Pass 
+AI Chatbot  Ask about 
+analysed scan  Type 'What 
+did you find in 
+my scan?' in 
+chatbot.  Chatbot 
+responds with 
+prediction and 
+confidence 
+from context.  Chatbot returned 
+correct prediction 
+and stage from 
+Sector 2.  Pass 
+ 
+Table 3.5: Sprint II Functional Test Cases  
+ 
+ 
+The clinical narrative engine generates comprehensive, location -specific reports that include stage 
+estimation, risk grading, anatomical analysis, symptom lists, diagnostic proced ures, and treatment 
+options — all tailored to the specific cancer subtype and its precise 8 -zone location.  
+ 
+ 
+ 
+ 
+17 
+ 
+
+=== PAGE 28 ===
+  
+ 
+3.2.3  Architecture Document  
+Three main additions were introduced into the architecture during Sprint II:  
+ Explainability Engine (LIME + Grad -CAM):  
+The Grad -CAM part hooks both forward and backward layers for ResNet50 at layer 4. Gradients are 
+hooked, global average -pooled, and then used as weights for weighted feature activation maps in the 
+process of inference. This results in ReLU , normalization, and scaling of the obtained image to 224 
+x 224 dimensions. The LIME component generates positive overlay images and full overlay images 
+based on 100 perturbation images via the lime_image package with Quickshift segmentation.  
+ Clinical Narr ative Engine:  
+Notes.py is a Python script with 1,271 lines of code, including binary malignant information for eight 
+anatomical regions and structured clinical information for three types of cancer. Each region is 
+accompanied by eight symptoms, five possib le diagnoses, five treatments, and a paragraph analyzing 
+the location, all of which have been carefully crafted with clinical accuracy. The correct version is 
+selected by the engine based on the results of an 8 -region heatmap analysis.  
+ AI-powered Chatbot:  
+User queries and contextual information from both domains are received at a Flask endpoint (/chat). 
+After determining the query’s intent via keyword matching, the chatbot responds with relevant 
+contextual information based on the analyzed scan, such as pre dictions, confidence levels, stages, and 
+location information.  
+ 
+3.2.4 Analysis of Results/ Achievement of Objectives : 
+All goals for Sprint II were successfully met. Under pathological conditions, the use of Grad -CAM results 
+in effective localization of the key nodule with good alignment to the expected diagnosis. The use of Dual -
+CAM provides a visual demonstration of the decision boundary used by the algorithm. The LIME 
+approach makes use of narrative explanations to identify superpixels that support and oppose each other.  
+The clinical narrative generator produces full and detailed reports that are tailored specifically fo r a 
+particular cancer type and its location in one of 8 zones. Such reports contain information regarding 
+staging, risk evaluation, anatomy, symptoms, diagnosis, and treatment options.In a system with a GPU, 
+the whole workflow (image pre -processing, classi fication, Grad -CAM application, and narrative 
+generation) takes less than 1.5 seconds per image slice.  
+ 
+ 
+18 
+
+=== PAGE 29 ===
+  
+ 
+ 
+Fig.3.2 Accuracy metrics for Sector 2 Malignancy Detection using the LIDC - 
+IDRI dataset.  
+3.2.5  Sprint Retrospective  
+ 
+ 
+What Went Well  What Went Poorly  Ideas / Improvements  Actions Taken  
+High correlation 
+existed between the 
+predictions made 
+using heatmaps and 
+the expected location 
+of the tumors.  
+ LIME Initially, it would 
+take over 30 seconds to 
+make a prediction using 
+LIME due to high 
+perturbations.  
+ Regarding the 
+allowed maximum 
+delay time, set batch 
+size to ten and 
+sample size to one 
+hundred.  
+ LIME works on 
+demand rather than 
+automatically and can 
+run in under ten 
+seconds.  
+ 
+The system 
+consisting of 96 
+medical conditions is 
+highly app reciated 
+due to its rich 
+knowledg e base.  
+ It is due to threshold 
+sensitivity that some 
+peripheral tumors 
+have been 
+misdiagnosed as 
+being central tumors.  
+ For increased boundary 
+sensitivity, reduce 
+detection rate of central 
+zone from 0.9 to 0.8.  
+. Tuned cen tral 
+detection: is_central = 
+zone_scores['central'] > 
+max_vert * 0.8.  
+It is simple to 
+understand Dual -
+CAM even for a 
+layman since it is 
+visually explained.  
+ Several medical 
+questions could not 
+be answered owing to 
+the use of keyword -
+based algorithm in 
+chatbots.  
+ Use context -based 
+response generation 
+and add more 
+keywords to your 
+vocabulary.  
+ Redo chatbot to check  
+context before falling 
+back to keyword 
+matching.  
+ 
+ 
+Table 3.6: Sprint II Retrospective  
+ 
+ 
+ 
+19 
+
+
+=== PAGE 30 ===
+  
+CHAPTER  4 
+RESULTS AND DISCUSSIONS  
+4. Project Outcomes (Performance Evaluation, Comparisons, Testing Results)  
+This project  includes an extensive discussion on Lung Cancer AI Diagnostic System. All the results 
+extracted by analyzing the system have been classified into six separate sections that includ e 
+Accuracy Assessment of Classification Model, Efficiency Analysis of Image Preprocessing, 
+Explanation Ability through Grad -CAM, LIME Analysis Performance Assessment, Performance 
+Assessment of Clinical Narrative Engine, and Online Performance of the Applic ation.  
+4.1 Classification Model Performance  
+4.1.1 Sector 1 — Four -Class Subtype Classification  
+The number of subtypes involved in this process is four. These include Adenocarcinoma, Squamous 
+Cell Carcinoma, Large Cell Carcinoma, and Normal subtypes. Classi fication was done based on all 
+the above subtypes using the Kaggle Chest CT Dataset and ResNet50 Architecture along with Custom 
+FC Head.  
+To address the issue of class imbalance that exists in this data set, the training used SMOTE, a 
+minority oversampling method performed at the feature level. The least represented category, Large 
+Cell Carcinoma, is significantly underrepresented compared to Adenocarcinoma and Normal 
+classifications. Without the use of SMOTE, 38 percent of large cells were misclassified as 
+Adenocarcinoma in the original model, indicating a significant class bias toward the most prevalent 
+category. After SMOTE was applied, the total accuracy increased from 88 percent to 95 percent, 
+while large cell carcinoma recall increased from 62 percent t o 89 percent.  
+ 
+Table 4.1: Per -Class Performance — Sector 1 (4 -Class Classifier)  
+Class  Precision  Recall  F1-Score  Support  
+Adenocarcinoma  0.96 0.95 0.955  315 
+Squamous Cell  0.94 0.96 0.950  298 
+Large Cell  0.91 0.89 0.900  142 
+Normal  0.98 0.99 0.985  370 
+Weighted Avg  0.95 0.95 0.950  1125  
+ 
+ 
+ 
+20 
+
+=== PAGE 31 ===
+   
+ 
+Based on the confusion matrix analysis, the most frequent error is the confusion between 
+Adenocarcinoma and Large Cell Carcinoma (4.2%), a result that confirms the available data from 
+radiological literature according to which these two types have similar morphologic features on the 
+CT scan. Squamous cell carcinoma was the type of tumor least confused with the others due to the 
+specific location inside the main bronchus that leads to specific spatial patterns in the CT image. The 
+classification of normal ti ssue performed exceptionally well, with a recall score of 99%.  
+After 50 epochs, there is a smooth convergence of the training graphs without any evidence of 
+overfitting. From epoch 35 onwards, the validation loss was constant, and early stopping was 
+appliedusing patience for 10 epochs.  
+4.1.2 Sector 2 — Binary Malignancy Detection  
+Pretraining of ImageNet V2 was utilized for the secondary binary classifier, whose architecture 
+followed that of ResNet50, but had an extended head layer (2048 → 512 → 128 → 2) and employed 
+Dropout layers of 0.4 and 0.3. The purpose of the secondary classifier was classification of 
+benign/malignant nodules.The utilization of ImageNet V2 pre -trained weights proved successful for 
+this problem statement. The advantage of transfer  learning amounted to around 7 percentage points 
+(from 85.1% to 92.3%). This is because the rich texture and edges representations learned by pre -
+trained feature extraction layers were successfully transferred to malignant tumors with their distinct 
+border  and density variations.  
+ 
+Compared to Benign (0.91), the binary classification method displays greater precision in terms of 
+the Malignant category (0.94), as this classification method is preferred because it decreases the 
+probability of false negatives, meaning the lack of identifying existing cancers. In terms of the ability 
+of this model to differentiate between small textural differences of benign and malignant nodules, the 
+presence of a larger classification head with an additional intermediate 128 -neuron layer becomes 
+helpful.  
+ 
+4.1.3 Model Architecture Comparison  
+ResNet50 was clearly superior to the remaining classification models. Residual links allow this neural 
+network to learn complicated features hierarchically due to the better management of the  vanishing 
+gradient problem compared to deep but basic models such as VGG -16. EfficientNet -B0 showed 
+mixed results when processing grayscale images.  
+ 
+ 
+21 
+
+=== PAGE 32 ===
+  
+ 
+ 4.2 Image Preprocessing Evaluation  
+ 
+To normalize the images generated by various types of CT scanni ng devices and methods, the pre -
+processing pipeline is vital. The six steps in the pre -processing pipeline include Median Blur (k=3), 
+Global Histogram Equalization, Contrast Limited Adaptive Histogram Equalization (CLAHE) with 
+clipLimit = 2.0 and tileGridS ize = 8×8, Morphological Operations Open, Morphological Operations 
+Close, and 3 -channel stacking with ImageNet Normalization.  
+The entire pre -processing pipeline yields an increase of around 11.3% and 8.1% for Sector 1 and 
+Sector 2, respectively, relative t o raw input images. The pre -processing step that has the most 
+significant impact individually on image normalization is Contrast Limited Adaptive Histogram 
+Equalization (CLAHE). This algorithm improves the contrast between the nodule and the surrounding 
+lung parenchyma. Morphological operations (open and close with a 3x3 elliptical kernel) help bridge 
+small holes in tissue boundaries and reduce small artifacts.  
+ 
+Fig.4.1 System Implementation Screenshot showing Subtype Identification  
+and Malignancy Results.  
+ 
+ 
+ 
+22 
+
+
+=== PAGE 33 ===
+  
+ 
+The intentional pairing of the GHE and CLAHE approaches means that where the CLAHE approach 
+boosts local contrast without amplifying the noise, which is inherent in CLAHE itself when applied 
+directly to raw CT images, GHE provides basic contrast e nhancement to the whole image. As such, 
+this approach results in CT scans with clear depiction of both the nodular structures and gross 
+anatomical structures.  
+4.3 Validation of Grad -CAM Explainability  
+Through the recording of the gradients at the entrance of the last convolutional layer of ResNet50 
+(Layer 4) in the backward propagation step for the target class, the Grad -CAM (Gradient -weighted  
+Camera which is used by heat maps to identify the cancer wh ich are present and using colours shows  
+(Class Activation Mapping) method generates visual heat maps. These regions of the CT scan most 
+influential on the classification are marked by the resulting activation map . 
+ 
+4.3.1 Localisation Accuracy  
+In 98% of cases, the heatmap can correctly pinpoint the important area from the qualitative analysis 
+of Grad -CAMs for 200 pathological test cases. For the overwhelming majority of test cases, the 
+activation centroid (center weighted of the heatmap) falls within the specified nodule area. The 
+remaining 2% of test cases that did not show satisfactory localization were because of very tiny 
+nodules (less than 5 mm) at the edge of the lungs, due to the lack of localization capability because 
+of the poor spatial resolution  of the 4th layer feature map (7×7).  
+ 
+4.3.2 Anatomical Localization Using Eight Regions  
+Without the center of the image, the 224x224 heatmap grid is subdivided into 3x3 grids using the 8 -
+region analyzer, yielding 8 regions: Top Left, Top, Top Right, Left, Right, Bottom Left, Bottom, 
+Bottom Right. 4.3.3 Heatmap Analysis MetricsThe heatmap analysis engine extracts six quantitative 
+metrics from each Grad -CAM  
+ 
+ 
+ 
+ 
+ 
+23 
+
+=== PAGE 34 ===
+  
+ 
+This information correlates well with known clinical features for each specific subtype. 
+Adenocarcinoma tends to appear as discrete peripheral nodules, as seen by the spherical shape and 
+low activation rate. Normally developing in the mid bronchus, squamous cell carcinoma typically 
+leads to rather large acti vations with an elongated shape. Being the most aggressive subtype, big cell 
+carcinoma produces very large, intense activations that are numerous and irregular.  
+ 
+Table 4. 2: Heatmap Analysis — Sample Results Across Cancer Subtypes  
+ 
+4.3.4 Comparison of Dual -CAM  
+Dual -CAM gives heatmaps of both the projected class and its strongest competitor, the class with the 
+second highest probability. It is essentially visual representation of the decision boundary. The 
+projected class heatmap is characterized by dense and intense activations within the nodule area, and 
+in test cases the dual -CAM comparison reveals distinct activations in 94% of samples.  
+ 
+4.4 LIME Analysis Evaluation  
+Based on a perturbation approach, the LIME (Local Interpretable Model -agnostic Exp lanations) 
+component provides additional information for the Grad -CAM approach. As opposed to examining 
+the gradient flow, the LIME approach examines the effect of the prediction in relation to different 
+regions covered by superpixels, whether it supports or negates the diagnosis  
+ 
+ 
+ 
+24 Metric  Adenocarcinoma 
+(avg)  Squamous 
+Cell (avg)  Large Cell 
+(avg)  
+Activation 
+Percentage  8.3%  14.7%  32.5%  
+Size Label  Small  Medium  Large  
+Mean 
+Intensity  0.68 0.72 0.81 
+Intensity 
+Label  Moderate  Moderate  High  
+Dominant 
+Shape  Rounded nodular  Oval / 
+elongated  Irregular  
+Average 
+Spots  1.2 1.6 3.4 
+
+=== PAGE 35 ===
+  
+ 
+The best 8 superpixels and 100 perturbations were used for the LIME analysis. As compared to the 
+Grad -CAM approach (<0.2s), the average GPU processing time is 8 seconds per image. 
+Consequently, the LIME model was implemente d as an on -demand approach rather than an automatic 
+one.The LIME results show strong agreement with Grad -CAM localisation (87 -89% location 
+agreement), validating the consistency of the model's decision -making process across two 
+fundamentally different expl anation methods. The positive superpixel coverage (12 -15%) indicates  
+ 
+ 
+Fig.4.2 from a normal ct image to gead cam observed ct image  
+ 
+that the model relies on specific, localised features rather than diffuse patterns, which is consistent 
+with the focal nature of lung nodules.  
+Explanation in natural language, including the percentage of supporting and dissenting superpixels, 
+their location within the body part, and the implications on prediction performance, is generated via 
+the narrative generated by the  LIME algorithm. In doing so, the story provides additional information 
+that complements the Grad -CAM explanation through its completely different perspective on the 
+issue.  
+ 
+ 
+ 
+ 
+ 
+25 
+
+
+=== PAGE 36 ===
+  
+4.5 Evaluation of Clinical Narrative Engines  
+The Clinical Narrative Engine  generates structured clinical diagnosis based on the Grad -CAM 
+heatmap visualization and classification output. The engine was clinically validated in terms of its 
+relevance and correctness and offers 96 possible report versions (3 cancer types × 8 anatomi cal sites 
+× 4 data types, plus 8 binary malignant sites).4.5.1 Report Structure Validation  
+Four sections in each report are Location Analysis (tumor site description in terms of anatomy), 
+Symptoms (eight symptoms depending on tumor  location), Next Steps (five procedures 
+recommended for diagnostics), and Treatments (five possible treatment options). Established 
+standards of radiology reporting and cancerology literature were compared with all clinical 
+information provided.In order to  determine the stage of malignancy using the heatmap activation rate: 
+less than 10% activation is indicative of Stage I; between 10% and 30% is Stage II; over 30% 
+activation suggests Stage III -IV malignancy. The estimated result is valuable for a prelimina ry 
+assessment for urgent surgical intervention.  
+ 
+ 
+Fig.4. 3 Web Dashboard — Sector 2 (Malignancy Detection)  
+ 
+ 
+ 
+26 
+
+
+=== PAGE 37 ===
+   
+ 
+CHAPTER  5 
+CONCLUSION AND FUTURE ENHANCEMENT  
+5.1 Conclusion  
+To address the many limitations that exist in the existing CAD systems, it was possible to develop an 
+effective and efficient Lung Cancer AI Diagnostic System. The hierarchical ResNet50 model with 
+95% accuracy in 4 -class histological subtyping has the potential to match modern technologies, yet 
+still produce a richer diagnostic infor mation.  
+The clinicians not only will be able to understand what information has been detected by the AI, but 
+also learn how and where it has done it with the help of the two -stage application of the XAI method 
+(Grad -CAM and LIME). This process becomes even  more transparent with the help of the Dual -CAM 
+system.  
+The use of such innovations that bring about harmony between AI computations and clinical decision 
+making includes the use of the Automated Clinical Narrative Engine that generates up to 96 diagnosis 
+reports based on the location involved. Instead of delivering scores, the system offers meaningful 
+results in terms of creating narratives out of heatmaps through symptomatology and other clinical 
+interventions.Indeed, the whole web interface represents an  innovative way for integrating AI medical 
+technologies into a convenient platform.  
+ 
+5.2 Key Contributions  
+1. Hierarchical ResNet50 Classification Pipeline: This two -tiered classification framework performs 
+better than one -stage classification systems in c omplicated image recognition tasks, achieving 95% 
+accuracy on four -class histopathology subtype classification and 92.3% on malignancy binary 
+classification.  
+2. Two -Level Explainability Approach: Offering complementary analysis with basically different 
+methods of interpretation, this is the first use case of combining Grad -CAM interpretability approach 
+and LIME interpretability method in a single diagnosis of lung cancer system.  
+ 3. Double CAM Visualization Component: This innovative approach creates heat m aps of the 
+counter -class and predicted class simultaneously, making it possible for users to understand the 
+decision -making process of the algorithm.  
+4. 8-Area Zone Mapping: It is an automated spatial mapping tool that uses quantitative metrics for 
+charact erizing size, shape, intensity, and spread of the regions of interest to map Grad -CAM 
+activation zones to clinically meaningful anatomical zones.  
+ 
+ 
+27 
+
+=== PAGE 38 ===
+  
+ 
+Clinical Narrative Engine: An end -to-end report generation tool that features 96 variations based on 
+locations to produce structured medical notes that include symptomatology, procedures, and 
+treatment for the cancer subtype and precise location of the tum or. 
+1. Production -Grade Deployment online: A complete online Flask application that comes with the AI 
+medical chatbot, dark -theme interface, drag -and-drop upload of medical images, live inference and 
+visualization, and summary report generation.  
+ 
+5.3 Limit ations  
+While the system demonstrates strong performance across multiple evaluation dimensions, several 
+limitations must be acknowledged:  
+ 
+1. Dataset used:  The dataset from one Kaggle Chest CT data set was utilized for training of the 4 -
+class classifier. Performance may vary depending on the imaging technique used, the scanner brand 
+or image reconstruction process used. Validation at multiple institutions is  required before clinical 
+use. 
+2. 2D slice analysis: In contrast to analyzing the entire 3D CT scan, the present methodology works 
+with individual 2D CT scans. This means that the system cannot benefit from analysis in 3D of 
+morphology, growth, and volumet ric estimation of nodules that physicians rely on in their 
+assessments.  
+3. Stage Prediction Estimation: The heat map -based prediction method does not replace the TNM 
+staging process, which includes measurements of tumor size, lymph node metastasis, and met astasis, 
+but only provides approximation estimates for the same.  
+4. LIME Latency: While Grad -CAM runs at a sub -second latency range, LIME requires about 8 
+seconds per interpretation. The latter is simply too long and therefore makes LIME unusable as a part  
+of automatic operations.  
+ 5. Complex Question Handling by the Medical Chatbot: The current medical chatbot’s ability to deal 
+with complex medical questions beyond the preset knowledge base is constrained since the chatbot 
+does not employ a large language model but simply matches keywords.  
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+28 
+
+=== PAGE 39 ===
+  
+ 
+5.4 Future Enhancement  
+Based on the outcomes and limitations of this project, several directions for future enhancement are 
+identified:  
+1. PACS/DICOM Compatibility : Clinical CT scans are maintained using PACS (Picture Archiving 
+and Communication System) systems and are stored in DICOM (Digital Imaging and 
+Communications in Medicine) file format. Future development will involve directly linking the 
+system with hospital PACS systems so that radiologists are able to send CT scans to the AI diagnostic 
+system from their existing radiology workstations. This will also allow for obtaining additional 
+information about the DICOM scans (such as slice thickness and imaging protocol).  
+2. 3D Volumetric Analysis : The system will enable the complete characterization of the nodules 
+through volumetric analysis, growth rate calculation between successive scans, and analysis of the 
+three -dimensional morphology through a switch from the present 2D slice -based analysis to 3D 
+volumet ric analysis. This is accomplished by replacing the existing 2D ResNet50 model with the 3D 
+CNN model that has been trained on volumetric CT scans, like 3D -ResNet or V -Net. The 3D Grad -
+CAM will output a 3D heatmap instead of heatmaps for individual slices.  
+3. Classification of Small Cell Lung Cancer (SCLC) : There are currently three types of Non -Small 
+Cell Lung Cancer (NSCLC) classified in the system. SCLC, representing about 15% of lung cancer 
+cases, has a completely different treatment protocol (primarily chemo -radiation therapy versus 
+surgical excision), and should also be classified within the clinical framework of the system.  
+4. Incorporation of Large Language Model (LLM):  The diagnosis capabilities of the system during 
+conversations can be significantly  enhanced through the incorporation of an advanced Large 
+Language Model (LLM), specifically one that pertains to medical information (more developed 
+versions of LLaMA or GPT), capable of participating in difficult medical dialogues, interpreting 
+complex in formation in an easily understandable manner, and analyzing the information by 
+comparing it to the current scientific literature on the topic of oncology. The information base for 
+oncological knowledge will be incorporated into the RAG system.  
+5. Multi -institutional Validation Study:  A multi -institutional validation study must be conducted 
+before implementing the system in clinical settings.  
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+29 
+ 
+
+=== PAGE 40 ===
+                     REFERENCES  
+ 
+[1]Mohammad Q. Shatnawi,Deep  learning -based approach to diagnose lung cancer using CT -scan 
+images, elseveir.2025  
+[2]TEHNAN I. A. MOHAMED, Enhancing Lung Cancer Classification and Prediction With Deep 
+Learning and Multi -Omics Data, IEEE Access.2024  
+[3]ABDULRAHMAN ALZAHRANI, Early Detection of Lung Cancer Using Predictive Modeling 
+Incorporating CTGAN Features and Tree -Based Learning, IEEE Access 2022  
+[4]Marmar R. Moussa, Inference of Tumor Progression Patterns in Colon Cancer Using Optimal Cell 
+Order Analysis in Single Cell Resolution, IEEE TRANSACTIONS.2023  
+[5]Hsieh -Fu Tsai, Evaluation of EGFR and RTK Signaling in the Electrotaxis of Lung 
+Adenocarcinoma Cells under Direct -Current Electric Field Stimulation,PLOS one.2022  
+[6]Explainable AI for Healthcar e 5.0: Opportunities and Challenges  
+Deepti Saraswat ; Pronaya Bhattacharya , IEEE access 2022  
+[7]Explainable A I in Healthcare  
+Urja Pawar ; Donna O’Shea , IEEE Explore 2022  
+[8]From Blackbox to Explainable AI in Healthca re: Existing Tools and Case 
+StudiesParvathaneniNaga Srinivasu , 1N. Sandhya, august 2023  
+[9]Explainable AI in Healthcare Application  
+Siva Raja Sindiramutty (Taylor's University, Malaysia),  Wee Jing Tee  
+2024  
+[10]Deep Learning Innovations in Detection of Lung Cancer: Advances, Trends and Open 
+Challenges, Cognitive Computation , 2025.  
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+30 
+
+=== PAGE 41 ===
+ APPENDIX A  
+ 
+CODING  
+LIME Explainer code  
+""" 
+================================================================  
+LIME Explainer — Local Interpretable Model -agnostic Explanations  
+Generates superpixel -based explanations for CT scan predictions  
+================================================================  
+""" 
+ 
+import cv2  
+import base64  
+import numpy as np  
+from PIL import Image  
+from lime import lime_image  
+from skimage.segmentation import mark_boundaries  
+ 
+class LimeExplainer:  
+    def __init__(self , model, transform, device, class_names):  
+        self.model = model  
+        self.transform = transform  
+        self.device = device  
+        self.class_names = class_names  
+        self.explainer = lime_image.LimeImageExplainer()  
+ 
+    def _batch_predict(sel f, images):  
+        """ 
+        LIME passes numpy arrays (N, H, W, 3) in 0 -255 range.  
+        Convert to tensor and run inference.  
+        """ 
+        import torch  
+ 
+        batch = []  
+        for img in images:  
+            pil = Image.fromarray(img.astype (np.uint8))  
+            tensor = self.transform(pil)  
+            batch.append(tensor)  
+ 
+        batch_tensor = torch.stack(batch).to(self.device)  
+ 
+        self.model.eval()  
+        with torch.no_grad():  
+            outputs = self.model(batch_tensor)  
+            probs = torch.softmax(outputs, dim=1)  
+                          31 
+
+=== PAGE 42 ===
+         return probs.cpu().numpy()  
+ 
+    def explain(self, img_rgb_224, pred_idx,  
+                num_samples=100, num_features=8):  
+        """ 
+        Generate LIME explanation for an image.  
+        img_rgb_224: numpy array (224, 224, 3) uint8  
+        pred_idx: predicted class index  
+        Returns: (positive_overlay, mask_overlay, narrative)  
+        """ 
+        # Run LIME  
+        try: 
+            explanation = self.explainer.explain_instance(  
+                img_rgb_224,  
+                self._batch_predict,  
+                top_labels=len(self.class_names),  
+                hide_color=0,  
+                num_samples=num_samples,  
+                batch_size=10  
+            ) 
+        except Exception as e:  
+            # Fallback if LIME fails  
+            return None, None, f"LIME Error: {str(e)}"  
+ 
+        # Get the explanation for the predicted class  
+        temp_pos, mask_pos = explanation.get_image_and_mask(  
+            pred_idx,  
+            positive_only=True,  
+            num_features=num_features,  
+            hide_rest=False  
+        ) 
+ 
+        temp_full, mask_full = explanation.get_image_and_mask(  
+            pred_idx,  
+            positive_only=False,  
+            num_features=num_features,  
+            hide_rest=False  
+        ) 
+ 
+        # Create overlay images  
+        pos_overlay = mark_boundaries(  
+            temp_pos / 255.0, mask_pos,  
+            color=(0.4, 1.0, 0.4), mode='thick'  
+        ) 
+         
+ 
+ 
+                             32 
+
+=== PAGE 43 ===
+ GradCam Code  
+""" 
+================================================================  
+Grad -CAM — Gradient -weighted Class Activation Mapping  
+Works for both EfficientNet and ResNet architectures.  
+================================== ==============================  
+""" 
+ 
+import cv2  
+import numpy as np  
+import torch  
+import torch.nn.functional as F  
+ 
+class GradCAM:  
+    def __init__(self, model, model_type="efficientnet"):  
+        self.model = model  
+        self.model_type = model_type  
+        self.gradients = None  
+        self.activations = None  
+        self._register_hooks()  
+ 
+    def _register_hooks(self):  
+        def forward_hook(module, input, output):  
+            self.activations = output.detach()  
+ 
+        def backward_hook(module, grad_input, grad_output):  
+            self.gradients = grad_output[0].detach()  
+ 
+        if self.model_type == "efficientnet":  
+            target_layer = self.model.features[ -1] 
+        elif self.model_type == "resnet":  
+            target_layer = self.model .layer4  
+        else: 
+            target_layer = self.model.features.denseblock4  
+ 
+        target_layer.register_forward_hook(forward_hook)  
+        target_layer.register_full_backward_hook(backward_hook)  
+ 
+    def generate(self, input_tensor, class_idx=None) : 
+        self.model.eval()  
+ 
+        # Move input to same device as model  
+        input_tensor = input_tensor.to(  
+            next(self.model.parameters()).device)  
+        input_tensor = input_tensor.requires_grad_(True)  
+ 
+ 
+              33 
+
+=== PAGE 44 ===
+  
+        if class_idx is None:  
+            class_idx = output.argmax(dim=1).item()  
+ 
+        # Backward pass for target class  
+        self.model.zero_grad()  
+        target = output[0][class_idx]  
+        target.backward()  
+ 
+        # Compute Grad -CAM  
+        gradients = self.gradients[0]  
+        activations = self.activations[0]  
+ 
+        # Global average pool gradients  
+        weights = gradients.mean(dim=(1, 2))  
+ 
+        # Weighted combination — keep on same device  
+        cam = torch.zeros(  
+            activations.shape [1:], 
+            dtype=torch.float32  
+        ).to(gradients.device)  
+ 
+        for i, w in enumerate(weights):  
+            cam += w * activations[i]  
+ 
+        # ReLU and move to CPU  
+        cam = F.relu(cam)  
+        cam = cam.cpu().numpy()  
+ 
+        if cam.max() > 0:  
+            cam = cam / cam.max()  
+ 
+        # Resize to 224x224  
+        cam = cv2.resize(cam, (224, 224))  
+        return cam, class_idx  
+ 
+    def generate_dual_cam(self, input_tensor, pred_idx, num_classes):  
+        """ 
+        Generate Grad -CAM for both the predicted class and the  
+        strongest counter -class (the next highest probability).  
+        Returns: (pred_cam, counter_cam, counter_idx)  
+        """ 
+        # Forward pass to get probabilities  
+        self.model.eval()  
+        input_te nsor = input_tensor.to(  
+            next(self.model.parameters()).device)  
+ 
+                          34 
+
+=== PAGE 45 ===
+             logits = self.model(input_tensor)  
+            probs = torch.softmax(logits, dim=1)[0]  
+ 
+        # Find counter class — highest prob class that isn't pred  
+        probs_np = probs.cpu().numpy()  
+        sorted_idx = np.argsort(probs_np)[:: -1] 
+        counter_idx = int(  
+            sorted_idx[0] if sorted_idx[0] != pred_idx  
+            else sorted_idx[1]  
+        ) 
+ 
+        # Generate CAM for pr edicted class  
+        pred_cam, _ = self.generate(input_tensor.clone(), pred_idx)  
+ 
+        # Generate CAM for counter class  
+        counter_cam, _ = self.generate(  
+            input_tensor.clone(), counter_idx)  
+ 
+        return pred_cam, counter_cam, counte r_idx  
+ 
+def generate_explanation_narrative(  
+    prediction, confidence, cam_analysis,  
+    class_names, probs_list, is_binary=True  
+): 
+    """ 
+    Generate a natural -language AI explanation from  
+    cam_analysis data and prediction results.  
+    """ 
+    a = cam_analysis  
+    pred = prediction  
+    conf = round(confidence, 1)  
+ 
+    # Confidence quality  
+    if confidence >= 90:  
+        conf_q = "high confidence"  
+        conf_note = "The model shows strong certainty"  
+    elif confidence >= 70:  
+        conf_q = "mod erate confidence"  
+        conf_note = (  
+            "The model shows reasonable certainty, "  
+            "but clinical correlation is recommended"  
+        ) 
+ 
+ 
+ 
+35 
+
+=== PAGE 46 ===
+ APPENDIX B 
+ 
+PUBLICATION DETAILS  
+ 
+ 
+ 
+ 
+ 
+                          36 
+
+
+=== PAGE 47 ===
+  
+APPENDIX C 
+PLAGIARISM AI REPORT  
+ 
+ 
+ 
+ 
+                                                                                 37 
+
+
+=== PAGE 48 ===
+  
+APPENDIX D 
+SIMILARITY  REPORT  
+ 
+ 
+ 
+ 
+38 
+
+

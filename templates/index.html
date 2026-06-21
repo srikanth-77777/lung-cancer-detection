@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Lung Cancer AI Diagnostic System</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}"/>
+</head>
+<body>
+ 
+<!-- ══════════════════════════════════════════
+     SIDEBAR
+══════════════════════════════════════════ -->
+<div class="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-row">
+      <div class="logo-icon">🫁</div>
+      <div class="logo-text">AI Lung Cancer Classification</div>
+    </div>
+    <div class="logo-sub">Diagnostic System v2.0</div>
+    <div class="status-pill">
+      <div class="dot"></div>
+      Models Online
+    </div>
+  </div>
+ 
+  <div class="nav">
+    <div class="nav-label">Diagnosis</div>
+ 
+    <div class="nav-item s1 active" onclick="goPage('p1',this)">
+      <div class="nav-num">01</div>
+      <div class="nav-info">
+        <div class="nav-title">Subtype Classification</div>
+        <div class="nav-sub"></div>
+      </div>
+      <div class="nav-badge" id="badge1">✓</div>
+    </div>
+ 
+    <div class="nav-item s2" onclick="goPage('p2',this)">
+      <div class="nav-num">02</div>
+      <div class="nav-info">
+        <div class="nav-title">Binary Detection</div>
+        <div class="nav-sub"></div>
+      </div>
+      <div class="nav-badge" id="badge2">✓</div>
+    </div>
+ 
+    <div class="nav-label">Report</div>
+ 
+    <div class="nav-item s3" onclick="goPage('p3',this)">
+      <div class="nav-num">03</div>
+      <div class="nav-info">
+        <div class="nav-title">Summary Report</div>
+        <div class="nav-sub">All results</div>
+      </div>
+      <div class="nav-badge" id="badge3" style="background:transparent;border:1px solid var(--green);color:var(--green)">✓</div>
+    </div>
+  </div>
+ 
+  <div class="sidebar-footer">
+  </div>
+</div>
+ 
+<!-- ══════════════════════════════════════════
+     MAIN
+══════════════════════════════════════════ -->
+<div class="main">
+ 
+  <!-- ─── PAGE 1: SECTOR 1 — SUBTYPE CLASSIFICATION ─── -->
+  <div class="page active" id="p1">
+    <div class="page-header">
+      <div class="page-tag">Sector 01 · 4-Class Classification</div>
+      <div class="page-title">Subtype Diagnosis</div>
+      <div class="page-sub">Adenocarcinoma / Large Cell / Squamous Cell / Normal classifier</div>
+    </div>
+ 
+    <!-- Upload -->
+    <div class="upload-card">
+      <div class="upload-zone" id="zone1"
+           ondragover="onDrag(event,'zone1')"
+           ondragleave="offDrag('zone1')"
+           ondrop="onDrop(event,'f1','pv1','pn1','ps1')">
+        <h3>Drop Kaggle Chest CT Scan here</h3>
+        <p>Full chest CT image · PNG / JPG / JPEG</p>
+        <label for="f1" class="file-label">📁 Browse from Computer</label>
+        <input type="file" id="f1" accept=".png,.jpg,.jpeg"
+               onchange="handleFile(this,'pv1','pn1','ps1','pi1')"/>
+      </div>
+      <div class="patient-input-row" style="margin-top: 18px; display: flex; align-items: center; gap: 12px; padding: 0 10px;">
+        <span style="font-size: 13px; font-weight: 500; color: var(--text); font-family: var(--font);">Patient Name:</span>
+        <input type="text" id="pat1" placeholder="Enter patient name (optional)" style="flex: 1; background: var(--bg); border: 1px solid var(--border); color: #fff; padding: 9px 14px; border-radius: 4px; font-family: var(--font); font-size: 13px; outline: none; transition: border-color 0.2s;" onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'">
+      </div>
+      <div class="preview-strip" id="pv1">
+        <img id="pi1" src="" alt=""/>
+        <div class="preview-info">
+          <div class="preview-name" id="pn1"></div>
+          <div class="preview-size" id="ps1"></div>
+        </div>
+        <button class="btn-analyze" id="ab1" onclick="runFourClass()">🔍 Analyze</button>
+      </div>
+      <div class="err-box" id="er1"></div>
+    </div>
+ 
+    <!-- Loading -->
+    <div class="loading" id="ld1">
+      <div class="spinner"></div>
+      <p>Running ResNet50 + Grad-CAM analysis...</p>
+    </div>
+ 
+    <!-- Result -->
+    <div class="result-content" id="rc1">
+      <div class="result-card">
+ 
+        <div class="diag-banner subtype" id="bn1">
+          <div class="diag-icon" id="di1"></div>
+          <div class="diag-main">
+            <div class="diag-lbl">Subtype Classification Result</div>
+            <div class="diag-res" id="dr1"></div>
+            <div class="diag-conf" id="dc1"></div>
+          </div>
+          <div class="risk-badge" id="rb1"></div>
+        </div>
+ 
+        <div class="prob-bars" id="pb1"></div>
+ 
+        <div class="img-grid g3">
+          <div class="img-card"><div class="img-card-lbl">Original CT</div><img id="oi1" src="" alt=""/></div>
+          <div class="img-card"><div class="img-card-lbl">Enhanced CT</div><img id="ei1" src="" alt=""/></div>
+          <div class="img-card"><div class="img-card-lbl">Grad-CAM Heatmap</div><img id="hi1" src="" alt=""/></div>
+        </div>
+ 
+        <div class="analysis-grid" id="ag1"></div>
+ 
+        <div class="notes-title">🏥 AI Clinical Diagnostic Notes</div>
+        <div class="notes-grid" id="ng1"></div>
+ 
+        <!-- XAI: Explainable AI Section -->
+        <div class="xai-section" id="xai1">
+ 
+          <!-- AI Explanation Narrative -->
+          <div class="xai-explain">
+            <div class="xai-explain-title">AI Reasoning Narrative</div>
+            <div class="xai-explain-text" id="xai1-narrative"></div>
+          </div>
+ 
+          <!-- XAI Info -->
+          <div class="xai-info-toggle" onclick="toggleXaiInfo('xai1-info')">
+            ℹ️ How does AI explanation work?
+          </div>
+          <div class="xai-info-content" id="xai1-info">
+            <strong>Grad-CAM</strong> generates a heatmap showing which regions of the CT scan the AI
+            focused on to arrive at its classification decision.
+            <ul>
+              <li><strong>Red heatmap</strong> — Regions supporting the predicted diagnosis</li>
+              <li><strong>Narrative</strong> — AI-generated explanation of the decision factors</li>
+            </ul>
+          </div>
+        </div>
+ 
+        <!-- Bridge text + jump button -->
+        <div id="bridge1" style="display:none;margin-top:24px;padding:28px;background:linear-gradient(135deg,rgba(255,68,68,0.08),rgba(255,140,0,0.08));border:1px solid rgba(255,140,0,0.35);border-radius:16px;text-align:center;">
+          <div style="font-size:36px;margin-bottom:14px;">🔬</div>
+          <div style="font-size:18px;font-weight:700;color:#ff8c00;margin-bottom:10px;" id="bridge1-title">
+            Cancer Subtype Confirmed — Further Analysis Required
+          </div>
+          <div style="font-size:14px;color:var(--muted);line-height:1.9;margin-bottom:22px;max-width:540px;margin-left:auto;margin-right:auto;" id="bridge1-desc">
+            The AI has confirmed the cancer subtype in this scan.
+            Proceed to <strong style="color:#ff8c00">Sector 2</strong> for a closer
+            <strong style="color:var(--text)">CT nodule scan</strong> to determine if the detected region is
+            <strong style="color:var(--text)">malignant or benign</strong>.
+          </div>
+          <button onclick="jumpToSector2()"
+            style="background:linear-gradient(135deg,#ff8c00,#cc5500);color:#fff;border:none;padding:15px 40px;border-radius:12px;font-size:15px;font-weight:700;cursor:pointer;font-family:var(--font);transition:all 0.2s;display:inline-flex;align-items:center;gap:10px;"
+            onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 8px 24px rgba(255,140,0,0.4)'"
+            onmouseout="this.style.transform='none';this.style.boxShadow='none'">
+            🔬 Proceed to Binary Detection →
+          </button>
+        </div>
+ 
+        <div class="disclaimer" id="ds1"></div>
+ 
+      </div>
+ 
+      <button class="btn-save" id="sv1" onclick="saveToSummary(1)">
+        💾 Save to Summary Report
+      </button>
+    </div>
+  </div>
+ 
+  <!-- ─── PAGE 2: SECTOR 2 — BINARY DETECTION ─── -->
+  <div class="page" id="p2">
+    <div class="page-header">
+      <div class="page-tag">Sector 02 · Binary Classification</div>
+      <div class="page-title">Malignancy Detection</div>
+      <div class="page-sub">Benign or Malignant binary classifier</div>
+    </div>
+ 
+    <!-- Upload -->
+    <div class="upload-card">
+      <div class="upload-zone" id="zone2"
+           ondragover="onDrag(event,'zone2')"
+           ondragleave="offDrag('zone2')"
+           ondrop="onDrop(event,'f2','pv2','pn2','ps2')">
+        <h3>Drop LIDC-IDRI CT Scan here</h3>
+        <p>Nodule CT slice · PNG / JPG / JPEG</p>
+        <label for="f2" class="file-label">📁 Browse from Computer</label>
+        <input type="file" id="f2" accept=".png,.jpg,.jpeg"
+               onchange="handleFile(this,'pv2','pn2','ps2','pi2')"/>
+      </div>
+      <div class="patient-input-row" style="margin-top: 18px; display: flex; align-items: center; gap: 12px; padding: 0 10px;">
+        <span style="font-size: 13px; font-weight: 500; color: var(--text); font-family: var(--font);">Patient Name:</span>
+        <input type="text" id="pat2" placeholder="Enter patient name (optional)" style="flex: 1; background: var(--bg); border: 1px solid var(--border); color: #fff; padding: 9px 14px; border-radius: 4px; font-family: var(--font); font-size: 13px; outline: none; transition: border-color 0.2s;" onfocus="this.style.borderColor='var(--orange)'" onblur="this.style.borderColor='var(--border)'">
+      </div>
+      <div class="preview-strip" id="pv2">
+        <img id="pi2" src="" alt=""/>
+        <div class="preview-info">
+          <div class="preview-name" id="pn2"></div>
+          <div class="preview-size" id="ps2"></div>
+        </div>
+        <button class="btn-analyze" id="ab2" onclick="runBinary()">🔍 Analyze</button>
+      </div>
+      <div class="err-box" id="er2"></div>
+    </div>
+ 
+    <!-- Loading -->
+    <div class="loading" id="ld2">
+      <div class="spinner"></div>
+      <p>Running ResNet50 inference...</p>
+    </div>
+ 
+    <!-- Result -->
+    <div class="result-content" id="rc2">
+      <div class="result-card">
+ 
+        <div class="diag-banner" id="bn2">
+          <div class="diag-icon" id="di2"></div>
+          <div class="diag-main">
+            <div class="diag-lbl">Binary Classification Result</div>
+            <div class="diag-res" id="dr2"></div>
+            <div class="diag-conf" id="dc2"></div>
+          </div>
+          <div class="risk-badge" id="rb2"></div>
+        </div>
+ 
+        <!-- Benign -->
+        <div id="bg2" style="display:none">
+          <div class="img-grid g2">
+            <div class="img-card"><div class="img-card-lbl">Original CT</div><img id="oi2b" src="" alt=""/></div>
+            <div class="img-card"><div class="img-card-lbl">Enhanced CT</div><img id="ei2b" src="" alt=""/></div>
+          </div>
+          <div class="benign-msg">
+            ✅ <strong>No Malignancy Detected.</strong>
+            Lung tissue appears within normal parameters. Routine annual screening recommended.
+          </div>
+        </div>
+ 
+        <!-- Malignant -->
+        <div id="mg2" style="display:none">
+          <div class="img-grid g3">
+            <div class="img-card"><div class="img-card-lbl">Original CT</div><img id="oi2m" src="" alt=""/></div>
+            <div class="img-card"><div class="img-card-lbl">Enhanced CT</div><img id="ei2m" src="" alt=""/></div>
+            <div class="img-card"><div class="img-card-lbl">Grad-CAM Heatmap</div><img id="hi2" src="" alt=""/></div>
+          </div>
+          <div class="analysis-grid" id="ag2"></div>
+          <div class="rec-box" id="re2"></div>
+ 
+          <!-- Clinical Notes for Binary -->
+          <div class="notes-title">🏥 AI Clinical Diagnostic Notes</div>
+          <div class="notes-grid" id="ng2"></div>
+ 
+          <!-- XAI: Explainable AI Section -->
+          <div class="xai-section" id="xai2">
+ 
+            <!-- AI Explanation Narrative -->
+            <div class="xai-explain">
+              <div class="xai-explain-title">AI Reasoning Narrative</div>
+              <div class="xai-explain-text" id="xai2-narrative"></div>
+            </div>
+ 
+            <!-- LIME button for Binary -->
+            <button class="btn-analyze" id="lime-btn-s2" onclick="runLimeBinary()"
+              style="width:100%;margin-bottom:14px;background:linear-gradient(135deg,#9b59b6,#8e44ad);">
+              🔬 Generate LIME Explanation (Detailed Superpixel Analysis)
+            </button>
+            <div class="loading" id="ld-lime-s2">
+              <div class="spinner"></div>
+              <p>Running LIME perturbation analysis (~10-15s)...</p>
+            </div>
+            <div id="lime-result-s2" style="display:none">
+              <div class="dual-cam">
+                <div class="dual-cam-card pred">
+                  <div class="dual-cam-lbl" style="color:#9b59b6;background:rgba(155,89,182,0.06);">🟣 LIME — Positive Regions</div>
+                  <img id="lime-pos-img-s2" src="" alt=""/>
+                </div>
+                <div class="dual-cam-card counter">
+                  <div class="dual-cam-lbl" style="color:#9b59b6;background:rgba(155,89,182,0.06);">🔵 LIME — Boundary Mask</div>
+                  <img id="lime-full-img-s2" src="" alt=""/>
+                </div>
+              </div>
+              <div class="xai-explain" style="border-color:rgba(155,89,182,0.3);">
+                <div class="xai-explain-title" style="color:#9b59b6;">LIME Analysis Summary</div>
+                <div class="xai-explain-text" id="lime-narrative-s2"></div>
+              </div>
+            </div>
+ 
+            <!-- XAI Info -->
+            <div class="xai-info-toggle" onclick="toggleXaiInfo('xai2-info')">
+              ℹ️ How does AI explanation work?
+            </div>
+            <div class="xai-info-content" id="xai2-info">
+              <strong>Dual Grad-CAM</strong> generates two heatmaps: one showing what the AI sees as evidence
+              for its predicted class, and another showing what it would consider evidence for the alternative.
+              When both heatmaps highlight different areas, the model has clearly distinct reasoning.
+              When they overlap, the region is ambiguous.
+              <ul>
+                <li><strong>Red heatmap (left)</strong> — Regions supporting the predicted diagnosis</li>
+                <li><strong>Green heatmap (right)</strong> — Regions the model associates with the alternative class</li>
+                <li><strong>LIME positive</strong> — Superpixels that increase the prediction confidence</li>
+                <li><strong>LIME mask</strong> — Boundary overlay showing all influential regions</li>
+              </ul>
+            </div>
+          </div>
+ 
+        </div>
+ 
+      </div>
+ 
+      <button class="btn-save" id="sv2" onclick="saveToSummary(2)">
+        💾 Save to Summary Report
+      </button>
+    </div>
+  </div>
+ 
+  <!-- ─── PAGE 3: SUMMARY ─── -->
+  <div class="page" id="p3">
+    <div class="page-header">
+      <div class="page-tag">Sector 03 · Summary Report</div>
+      <div class="page-title">Diagnostic Summary</div>
+      <div class="page-sub">All analyzed CT scans and classification results</div>
+    </div>
+ 
+    <div id="sumEmpty" class="summary-empty">
+      <span class="empty-icon">📋</span>
+      No results saved yet.<br>
+      Run analysis in Sector 1 and Sector 2,<br>
+      then click <strong>"Save to Summary"</strong> to see results here.
+    </div>
+ 
+    <div id="sumContent" style="display:none">
+      <div class="sum-actions">
+        <button class="btn-clear" onclick="clearSummary()">🗑 Clear All</button>
+        <button class="btn-print" onclick="window.print()">🖨 Print / Screenshot</button>
+      </div>
+      <div class="summary-grid" id="sumGrid"></div>
+    </div>
+  </div>
+ 
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     CHATBOT WIDGET
+══════════════════════════════════════════ -->
+<div class="chat-widget">
+  <div class="chat-window" id="chatWindow">
+    <div class="chat-header">
+      <div class="chat-header-title">
+        <span>🤖</span> Medical AI Assistant
+      </div>
+      <button class="chat-close" onclick="toggleChat()">×</button>
+    </div>
+    <div class="chat-body" id="chatBody">
+      <div class="chat-msg bot">
+        Hello! I'm your Medical AI Assistant. You can ask me about CT scans, symptoms, treatments, or lung cancer subtypes.
+      </div>
+    </div>
+    <div class="chat-input-area">
+      <input type="text" id="chatInput" class="chat-input" placeholder="Ask a question..." onkeypress="handleChatKey(event)">
+      <button class="chat-send" onclick="sendChatMessage()">➤</button>
+    </div>
+  </div>
+  <button class="chat-toggle" onclick="toggleChat()">💬</button>
+</div>
+ 
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>
