@@ -592,9 +592,15 @@ def chat_endpoint():
         s2 = context.get('s2')
         has_context = bool(s1 or s2)
 
-        # Helper to get dynamic values
-        pred = s2.get('prediction', s1.get('prediction', 'Unknown')) if has_context else ""
-        conf = s2.get('confidence', s1.get('confidence', 0)) if has_context else 0
+        # Helper to get dynamic values safely
+        pred = ""
+        conf = 0
+        if s2:
+            pred = s2.get('prediction', 'Unknown')
+            conf = s2.get('confidence', 0)
+        elif s1:
+            pred = s1.get('prediction', 'Unknown')
+            conf = s1.get('confidence', 0)
         stage = "Unknown"
         location = "lung area"
         second_pred, second_conf = "", 0
