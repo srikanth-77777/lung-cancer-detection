@@ -497,3 +497,48 @@ function triggerDownload(dbId) {
   }
   window.open('/download/report/' + dbId, '_blank');
 }
+
+// ── Demo Image Gallery ──────────────────────────────────────
+var activeDemoSector = 1;
+
+function openDemoModal(sector) {
+  activeDemoSector = sector;
+  document.getElementById('demoModal').style.display = 'flex';
+}
+
+function closeDemoModal() {
+  document.getElementById('demoModal').style.display = 'none';
+}
+
+async function selectDemoImage(filename) {
+  closeDemoModal();
+  
+  // Show a little loading indicator in the preview area
+  var pId = 'p' + activeDemoSector;
+  var fId = 'f' + activeDemoSector;
+  var piId = 'pi' + activeDemoSector;
+  var pnId = 'pn' + activeDemoSector;
+  var psId = 'ps' + activeDemoSector;
+  var pvId = 'pv' + activeDemoSector;
+
+  document.getElementById(pnId).textContent = "Loading demo image...";
+  document.getElementById(pvId).classList.add('show');
+
+  try {
+    var url = '/static/demo_images/' + filename;
+    var response = await fetch(url);
+    var blob = await response.blob();
+    var file = new File([blob], filename, { type: blob.type });
+    
+    // Assign to global files object
+    files[fId] = file;
+    
+    // Set preview image
+    document.getElementById(piId).src = url;
+    document.getElementById(pnId).textContent = filename;
+    document.getElementById(psId).textContent = (file.size/1024).toFixed(1) + ' KB';
+    
+  } catch (err) {
+    alert("Failed to load demo image: " + err.message);
+  }
+}

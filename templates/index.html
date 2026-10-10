@@ -84,6 +84,7 @@
         <h3>Drop Kaggle Chest CT Scan here</h3>
         <p>Full chest CT image · PNG / JPG / JPEG</p>
         <label for="f1" class="file-label">📁 Browse from Computer</label>
+        <button type="button" class="btn-demo" onclick="openDemoModal(1)">✨ Try Demo Images</button>
         <input type="file" id="f1" accept=".png,.jpg,.jpeg"
                onchange="handleFile(this,'pv1','pn1','ps1','pi1')"/>
       </div>
@@ -205,6 +206,7 @@
         <h3>Drop LIDC-IDRI CT Scan here</h3>
         <p>Nodule CT slice · PNG / JPG / JPEG</p>
         <label for="f2" class="file-label">📁 Browse from Computer</label>
+        <button type="button" class="btn-demo" onclick="openDemoModal(2)">✨ Try Demo Images</button>
         <input type="file" id="f2" accept=".png,.jpg,.jpeg"
                onchange="handleFile(this,'pv2','pn2','ps2','pi2')"/>
       </div>
@@ -358,6 +360,44 @@
  
 </div>
 
+
+<!-- ══════════════════════════════════════════
+     DEMO MODAL
+══════════════════════════════════════════ -->
+<div id="demoModal" class="demo-modal" style="display:none;">
+  <div class="demo-modal-content">
+    <div class="demo-modal-header">
+      <h2>Select a Demo Image</h2>
+      <button class="demo-close" onclick="closeDemoModal()">×</button>
+    </div>
+    <div class="demo-gallery">
+      <div class="demo-item" onclick="selectDemoImage('normal_demo.png')">
+        <img src="{{ url_for('static', filename='demo_images/normal_demo.png') }}" alt="Normal">
+        <div class="demo-lbl">Normal</div>
+      </div>
+      <div class="demo-item" onclick="selectDemoImage('benign_demo.png')">
+        <img src="{{ url_for('static', filename='demo_images/benign_demo.png') }}" alt="Benign">
+        <div class="demo-lbl">Benign</div>
+      </div>
+      <div class="demo-item" onclick="selectDemoImage('malignant_demo.png')">
+        <img src="{{ url_for('static', filename='demo_images/malignant_demo.png') }}" alt="Malignant">
+        <div class="demo-lbl">Malignant</div>
+      </div>
+      <div class="demo-item" onclick="selectDemoImage('adeno_demo.png')">
+        <img src="{{ url_for('static', filename='demo_images/adeno_demo.png') }}" alt="Adenocarcinoma">
+        <div class="demo-lbl">Adenocarcinoma</div>
+      </div>
+      <div class="demo-item" onclick="selectDemoImage('large_cell_demo.png')">
+        <img src="{{ url_for('static', filename='demo_images/large_cell_demo.png') }}" alt="Large Cell">
+        <div class="demo-lbl">Large Cell</div>
+      </div>
+      <div class="demo-item" onclick="selectDemoImage('squamous_demo.png')">
+        <img src="{{ url_for('static', filename='demo_images/squamous_demo.png') }}" alt="Squamous Cell">
+        <div class="demo-lbl">Squamous Cell</div>
+      </div>
+    </div>
+  </div>
+</div>
 
 <!-- ══════════════════════════════════════════
      CHATBOT WIDGET
