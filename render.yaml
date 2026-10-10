@@ -1,0 +1,29 @@
+# render.yaml — Render deployment configuration
+# Docs: https://render.com/docs/yaml-spec
+
+services:
+  - type: web
+    name: lung-cancer-ai
+    runtime: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: python run_server.py
+    plan: starter          # Use 'free' if you want free tier (limited RAM)
+    
+    # Health check path
+    healthCheckPath: /
+    
+    # Environment variables — sensitive values are set via Render dashboard
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.11.0"
+      - key: PORT
+        value: "5000"
+      - key: HOST
+        value: "0.0.0.0"
+      - key: EFF_WEIGHTS
+        value: "./best_ResNet50_v5.pth"
+      - key: DENSE_WEIGHTS
+        value: "./resnet50_chest_ct_95acc_final.pth"
+      # Set these in the Render dashboard (not here — keep URLs private):
+      # MODEL_URL_1 = <direct URL for best_ResNet50_v5.pth>
+      # MODEL_URL_2 = <direct URL for resnet50_chest_ct_95acc_final.pth>

@@ -8,11 +8,17 @@ __pycache__/
 # Environment files
 .env
 .env.*
+!.env.example
 
 # SQLite database and instance data
 instance/
 *.db
 *.sqlite3
+
+# Virtual environment
+.venv/
+venv/
+env/
 
 # VS Code settings
 .vscode/
@@ -37,3 +43,23 @@ pip-wheel-metadata/
 # System files
 Thumbs.db
 .DS_Store
+
+# ── ML Model weight files (too large for GitHub) ──
+*.pth
+*.pt
+*.onnx
+*.h5
+*.pkl
+
+# ── Documents and reports ──
+*.docx
+*.pdf
+*.tex
+*.txt
+report_text.txt
+
+# ── Generated output ──
+Final*.docx
+PROJECT*.docx
+Lung_Cancer*.docx
+report*.docx

@@ -1,5 +1,10 @@
 import os
 from dotenv import load_dotenv
+
+# Download model weights from cloud storage if not present locally
+from download_models import ensure_models
+ensure_models()
+
 from waitress import serve
 from app import app
 
