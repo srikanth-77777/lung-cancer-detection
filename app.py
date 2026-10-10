@@ -12,6 +12,7 @@ import cv2
 import base64
 import numpy as np
 import torch
+torch.set_num_threads(1)  # Reduce memory usage on free tier servers
 import torch.nn as nn
 from flask import Flask, request, jsonify, render_template, send_file
 from torchvision import models, transforms
@@ -130,8 +131,7 @@ def build_efficientnet(num_classes=2):
 
 
 def build_resnet50():
-    m = models.resnet50(
-        weights=ResNet50_Weights.IMAGENET1K_V2)
+    m = models.resnet50(weights=None)
     m.fc = nn.Sequential(
         nn.Linear(m.fc.in_features, 512),
         nn.ReLU(),
