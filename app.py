@@ -580,115 +580,224 @@ def explain_lime_binary():
 
 @app.route('/chat', methods=['POST'])
 def chat_endpoint():
-    """Mock AI Chatbot Endpoint with expanded Q&A and Context Awareness"""
+    """AI Medical Assistant Chatbot — Intent-based Q&A with Context Awareness"""
     try:
         data = request.get_json()
         if not data or 'message' not in data:
             return jsonify({'error': 'No message provided'}), 400
-        
-        user_message = data['message'].lower()
+
+        user_message = data['message'].lower().strip()
         context = data.get('context', {})
         s1 = context.get('s1')
         s2 = context.get('s2')
         has_context = bool(s1 or s2)
 
-        # Helper to get dynamic values safely
-        pred = ""
-        conf = 0
+        # ── Extract dynamic values safely ──
+        pred, conf, stage, location = "", 0, "Unknown", "lung area"
+        second_pred, second_conf = "", 0
+        risk = "Unknown"
         if s2:
             pred = s2.get('prediction', 'Unknown')
             conf = s2.get('confidence', 0)
+            notes = s2.get('clinical_notes', {}) or {}
+            stage = notes.get('stage', 'Unknown')
+            risk = notes.get('risk', 'Unknown')
+            cam = s2.get('cam_analysis', {}) or {}
+            location = cam.get('location', location)
+            probs = s2.get('probabilities', {}) or {}
+            if probs:
+                sp = sorted(probs.items(), key=lambda x: x[1], reverse=True)
+                if len(sp) > 1:
+                    second_pred, second_conf = sp[1]
         elif s1:
             pred = s1.get('prediction', 'Unknown')
             conf = s1.get('confidence', 0)
-        stage = "Unknown"
-        location = "lung area"
-        second_pred, second_conf = "", 0
+            cam = s1.get('cam_analysis', {}) or {}
+            location = cam.get('location', location)
 
-        if has_context:
-            if s2 and 'probabilities' in s2:
-                # Find second highest
-                sorted_probs = sorted(s2['probabilities'].items(), key=lambda x: x[1], reverse=True)
-                if len(sorted_probs) > 1:
-                    second_pred, second_conf = sorted_probs[1]
-            if s2 and 'clinical_notes' in s2:
-                stage = s2['clinical_notes'].get('stage', 'Unknown')
-            if s1 and s1.get('cam_analysis'):
-                location = s1['cam_analysis'].get('location', location)
-            if s2 and s2.get('cam_analysis'):
-                location = s2['cam_analysis'].get('location', location)
+        # ── Intent matching engine ──
+        # Each entry: (list_of_trigger_keywords, answer, needs_image)
+        # If ANY trigger keyword appears in the message, that answer is returned.
+        # needs_image=True means the bot will ask for upload if no context.
+        intents = [
+            # ── Greetings ──
+            (['hello', 'hi', 'hey', 'good morning', 'good evening', 'howdy', 'sup'],
+             "Hello! 👋 I'm your AI Medical Assistant. I can help you understand CT scan results, cancer subtypes, confidence scores, heatmaps, and more. Upload a CT scan image and run an analysis, then ask me about the results!",
+             False),
 
-        # 1. Check if the question REQUIRES an uploaded image (Context-dependent questions)
-        context_keywords = ['predicted', 'this scan', 'stage is the cancer', 'confidence mean', 'second most likely', 'why did the model choose', 'where is the suspected abnormality', 'the report', 'the result']
-        if any(k in user_message for k in context_keywords):
-            if not has_context:
-                return jsonify({'response': 'Kindly upload your image and we shall carry on over with your answers.'})
-            
-            # Answer context-dependent questions
-            if 'predicted' in user_message or 'subtype' in user_message:
-                return jsonify({'response': f"According to the displayed result, the predicted subtype is {pred}, with {conf}% model confidence."})
-            if 'stage is the cancer' in user_message:
-                return jsonify({'response': f"The dashboard displays {stage}. However, an AI image classifier alone cannot reliably establish the clinical cancer stage."})
-            if 'confidence mean' in user_message or '41.3' in user_message:
-                return jsonify({'response': f"The model assigns a {conf}% score to its predicted {pred} class. This is not a {conf}% probability that the patient has cancer unless the model has been appropriately calibrated and clinically validated."})
-            if 'second most likely' in user_message:
-                return jsonify({'response': f"The displayed report lists {second_pred} as the next most likely class at {second_conf}%."})
-            if 'why did the model choose' in user_message:
-                return jsonify({'response': f"It identified image patterns associated with {pred} in its training data. The exact reasoning should be supported by model explanation outputs rather than invented by the chatbot."})
-            if 'where is the suspected abnormality' in user_message or 'located' in user_message:
-                return jsonify({'response': f"The current report describes a suspected abnormality in the {location}."})
+            # ── Basic diagnosis ──
+            (['what is lung cancer', 'define lung cancer', 'lung cancer meaning'],
+             "Lung cancer occurs when abnormal cells grow uncontrollably in lung tissue. It is one of the most common cancers worldwide.",
+             False),
+            (['what type', 'which type', 'types of lung cancer', 'cancer types', 'what can you detect', 'categories'],
+             "This model can detect: **Adenocarcinoma**, **Large Cell Carcinoma**, **Squamous Cell Carcinoma**, and **Normal** tissue (4-class model). It also has a binary model that classifies scans as **Benign** or **Malignant**.",
+             False),
+            (['difference between adenocarcinoma and squamous', 'adeno vs squamous'],
+             "Adenocarcinoma typically develops in mucus-producing cells in the outer lung areas, while Squamous Cell Carcinoma develops in squamous cells lining parts of the central airways. Adenocarcinoma is more common in non-smokers.",
+             False),
+            (['caused by smoking', 'smoking cause', 'only smokers'],
+             "No. Smoking is a major risk factor, but lung cancer can also occur in people who have never smoked due to genetics, radon exposure, or other environmental factors.",
+             False),
+            (['normal or abnormal', 'is it normal'],
+             "The model's classification indicates whether the scan resembles a learned category. A medical professional must confirm whether the scan is truly normal or abnormal.",
+             False),
 
-        # 2. General Knowledge Base Matching
-        responses = {
-            # Basic diagnosis
-            "what is lung cancer": "Lung cancer occurs when abnormal cells grow uncontrollably in lung tissue.",
-            "what types of lung cancer": "The model can identify the cancer categories it was trained on, such as Adenocarcinoma, Squamous Cell Carcinoma, and other supported classes.",
-            "normal or abnormal": "The model's classification can indicate whether the scan resembles a learned category. A medical professional must confirm whether the scan is normal or abnormal.",
-            "difference between adenocarcinoma and squamous": "Adenocarcinoma typically develops in mucus-producing cells, while squamous cell carcinoma develops in squamous cells lining parts of the airways.",
-            "always caused by smoking": "No. Smoking is a major risk factor, but lung cancer can also occur in people who have never smoked.",
-            
-            # Stage and severity
-            "what does stage ii mean": "Stage II generally describes lung cancer that has spread beyond the smallest localized tumour but remains within specific stage-dependent boundaries. Exact criteria depend on tumour size, lymph nodes, and spread.",
-            "is stage ii dangerous": "It is a serious diagnosis that requires prompt medical evaluation. Prognosis varies with the exact stage, tumour biology, and treatment.",
-            "from a ct scan alone": "CT findings help with staging, but complete staging may require lymph-node assessment, additional imaging, and sometimes biopsy.",
-            "spread to other organs": "This model cannot confirm distant spread from its classification result alone. Additional clinical investigations may be needed.",
-            "difference between stage i and stage iv": "Stage I is generally localized disease, while Stage IV involves distant spread or other stage-defining extensive disease.",
-            
-            # Confidence score and explanation
-            "prediction reliable": "The displayed confidence is relatively low, so the prediction is uncertain. It should not be used as a standalone diagnosis." if conf < 50 else "The prediction has high confidence, but it should still not be used as a standalone diagnosis without a radiologist's review.",
-            "model uncertain": "The image may contain features shared by multiple classes, or the scan may differ from the training data. The displayed scores alone cannot identify the exact cause.",
-            "what is a heatmap": "A heatmap highlights image regions that influence the model's prediction. It does not independently prove that those regions contain cancer.",
-            "blue or red area": "The meaning depends on the heatmap method and colour scale. In many visualizations, warmer colours indicate stronger model attribution, not cancer severity.",
-            "confidence and accuracy": "Confidence is the score assigned to an individual prediction; accuracy measures how often a model predicts correctly across a labelled evaluation dataset.",
-            
-            # Location and anatomy
-            "right lower lobe mean": "The right lung has three lobes. The lower lobe is the bottom section of the right lung.",
-            "basal segments": "These are subdivisions near the base of the lower lung lobe.",
-            "ivc mean": "IVC usually stands for inferior vena cava, a large vein carrying blood toward the heart. The report's reference to proximity needs clinical interpretation.",
-            "central location mean": "It generally refers to a finding near the central airways or structures of the lung. The precise location should be verified from the scan.",
-            "four foci mean": "It indicates four separate areas identified by the analysis. These are not automatically four confirmed cancerous lesions.",
-            "small size mean": "It refers to the size category used by your model. The exact physical size should be measured from the CT scan and its metadata.",
-            "tumour segmentation": "Segmentation identifies or outlines a region of interest in an image, such as a suspected lesion.",
-            
-            # Treatment and prevention
-            "can lung cancer be treated": "Yes. Treatment options depend on the cancer type and stage and may include surgery, radiation therapy, chemotherapy, targeted therapy, or immunotherapy.",
-            "treatment is used for stage ii": "Depending on the clinical findings, treatment may involve surgery and lymph-node assessment, chemotherapy, immunotherapy, or other appropriate therapies. An oncology team determines the plan.",
-            "can lung cancer be cured": "Some lung cancers can be cured, particularly when detected at an early stage. Outcomes vary by cancer type, stage, and treatment response.",
-            "prevented": "Avoid smoking, stop tobacco use, reduce exposure to second-hand smoke and hazardous substances, and follow appropriate screening guidance.",
-            "consult a doctor": "Yes. Share the original CT images and report with a qualified pulmonologist or oncologist for proper interpretation.",
-            "replace a radiologist": "No. It is a decision-support or educational tool, not a replacement for professional medical assessment."
-        }
+            # ── What is predicted / result (NEEDS IMAGE) ──
+            (['predicted', 'prediction', 'what did the ai find', 'what is the result', 'diagnosis result', 'what subtype'],
+             f"According to the displayed result, the predicted class is **{pred}** with **{conf}%** model confidence." if has_context else "",
+             True),
 
-        for key, reply in responses.items():
-            if key in user_message:
-                return jsonify({'response': reply})
+            # ── Stage questions ──
+            (['what stage', 'which stage', 'cancer stage', 'stage of'],
+             f"The dashboard displays **{stage}**. However, an AI image classifier alone cannot reliably establish the clinical cancer stage — complete staging requires additional imaging and biopsy." if has_context else "",
+             True),
+            (['stage ii mean', 'stage 2 mean', 'what does stage ii'],
+             "Stage II generally describes lung cancer that has spread beyond the smallest localized tumour but remains within specific stage-dependent boundaries. Exact criteria depend on tumour size, lymph nodes, and spread.",
+             False),
+            (['stage ii dangerous', 'stage 2 dangerous', 'is stage ii serious'],
+             "It is a serious diagnosis that requires prompt medical evaluation. Prognosis varies with the exact stage, tumour biology, and treatment.",
+             False),
+            (['ct scan alone', 'staging from scan'],
+             "CT findings help with staging, but complete staging may require lymph-node assessment, additional imaging, and sometimes biopsy.",
+             False),
+            (['spread to other', 'metastasis', 'spread organs'],
+             "This model cannot confirm distant spread from its classification result alone. Additional clinical investigations may be needed.",
+             False),
+            (['difference between stage i and stage iv', 'stage 1 vs stage 4', 'stage i vs iv'],
+             "Stage I is generally localized disease, while Stage IV involves distant spread or other stage-defining extensive disease.",
+             False),
 
-        # Fallback if no specific question matched but we have an image
-        if has_context and any(word in user_message for word in ['scan', 'ct', 'image', 'result']):
-            return jsonify({'response': f"Based on your latest analysis, the AI classified the image as {pred} with {conf}% confidence. Feel free to ask specific questions like 'What does {conf}% confidence mean?' or 'What is a heatmap?'"})
+            # ── Confidence / AI Explanation (some NEED IMAGE) ──
+            (['confidence mean', 'what does confidence', 'confidence score'],
+             f"The model assigns a **{conf}%** score to its predicted **{pred}** class. This represents how certain the model is about its classification, not the probability that the patient has cancer." if has_context else "Confidence score represents how certain the AI model is about its prediction. A higher score means the model is more sure. Upload an image to see the actual score!",
+             False),
+            (['reliable', 'trust', 'accurate prediction', 'can i trust'],
+             f"The current confidence is **{conf}%**. {'This is relatively low, so the prediction is uncertain.' if conf < 50 else 'This is reasonably high, but it'} should not be used as a standalone diagnosis. Always consult a qualified radiologist." if has_context else "AI predictions should never be used as standalone diagnoses. Always consult a qualified medical professional.",
+             False),
+            (['second most likely', 'next likely', 'runner up'],
+             f"The displayed report lists **{second_pred}** as the next most likely class at **{second_conf}%**." if has_context else "",
+             True),
+            (['why uncertain', 'model uncertain', 'why not sure'],
+             "The image may contain features shared by multiple classes, or the scan may differ from the training data. The displayed scores alone cannot identify the exact cause.",
+             False),
+            (['what is a heatmap', 'heatmap mean', 'explain heatmap', 'heat map'],
+             "A heatmap (Grad-CAM) highlights which regions of the CT scan the AI focused on to make its prediction. Red/warm areas show stronger model attention. It does NOT independently prove those regions contain cancer.",
+             False),
+            (['blue or red', 'red area', 'blue area', 'colour mean', 'color mean'],
+             "In the heatmap: **Red/warm colours** = regions the AI focused on most strongly. **Blue/cool colours** = regions with less model attention. This shows model attribution, NOT cancer severity.",
+             False),
+            (['why did the model choose', 'why this prediction', 'reasoning'],
+             f"The model identified image patterns associated with **{pred}** in its training data. For detailed reasoning, check the AI Reasoning Narrative and Grad-CAM heatmap in the results panel." if has_context else "",
+             True),
+            (['confidence and accuracy', 'difference between confidence'],
+             "**Confidence** is the score assigned to an individual prediction. **Accuracy** measures how often a model predicts correctly across a labelled evaluation dataset. They are related but different metrics.",
+             False),
 
-        return jsonify({'response': "I am your AI Medical Assistant. I can answer questions about lung cancer, CT scans, the AI's predictions, confidence scores, and heatmaps. Kindly upload your image and we shall carry on over with your answers, or ask me a general question!"})
-        
+            # ── Location / Anatomy ──
+            (['where is the', 'abnormality located', 'location of', 'where is it'],
+             f"The current report describes a suspected abnormality in the **{location}**." if has_context else "",
+             True),
+            (['right lower lobe', 'lower lobe'],
+             "The right lung has three lobes. The lower lobe is the bottom section of the right lung.",
+             False),
+            (['basal segment'],
+             "Basal segments are subdivisions near the base of the lower lung lobe.",
+             False),
+            (['what is ivc', 'ivc mean'],
+             "IVC usually stands for Inferior Vena Cava, a large vein carrying blood toward the heart.",
+             False),
+            (['central location'],
+             "Central location generally refers to a finding near the central airways or structures of the lung.",
+             False),
+            (['four foci', 'foci mean', 'multiple foci'],
+             "Foci indicates separate areas identified by the analysis. These are not automatically confirmed cancerous lesions — they are areas of model attention.",
+             False),
+            (['small size', 'size mean'],
+             "It refers to the size category used by the model's analysis. The exact physical size should be measured from the CT scan metadata.",
+             False),
+            (['segmentation', 'segment'],
+             "Tumour segmentation identifies or outlines a region of interest in an image, such as a suspected lesion.",
+             False),
+
+            # ── Treatment & Prevention ──
+            (['can lung cancer be treated', 'treatment option', 'how to treat', 'is it treatable'],
+             "Yes. Treatment options depend on the cancer type and stage and may include surgery, radiation therapy, chemotherapy, targeted therapy, or immunotherapy.",
+             False),
+            (['treatment for stage ii', 'stage 2 treatment', 'treat stage ii'],
+             "Depending on clinical findings, treatment may involve surgery, lymph-node assessment, chemotherapy, immunotherapy, or other therapies. An oncology team determines the plan.",
+             False),
+            (['can lung cancer be cured', 'curable', 'is it curable'],
+             "Some lung cancers can be cured, particularly when detected at an early stage. Outcomes vary by cancer type, stage, and treatment response.",
+             False),
+            (['prevent', 'avoid lung cancer', 'how to prevent'],
+             "Avoid smoking, stop tobacco use, reduce exposure to second-hand smoke and hazardous substances, and follow appropriate screening guidance.",
+             False),
+            (['consult a doctor', 'see a doctor', 'should i go to doctor', 'visit doctor'],
+             "Yes, absolutely. Share the original CT images and report with a qualified pulmonologist or oncologist for proper interpretation.",
+             False),
+            (['replace a radiologist', 'replace doctor', 'instead of doctor'],
+             "No. This AI is a decision-support and educational tool only. It is NOT a replacement for professional medical assessment by a qualified radiologist.",
+             False),
+
+            # ── About the system ──
+            (['what can you do', 'help', 'what do you know', 'your capabilities'],
+             "I can answer questions about:\n• CT scan results and predictions\n• Cancer subtypes (Adenocarcinoma, Large Cell, Squamous Cell)\n• Confidence scores and what they mean\n• Heatmaps and AI explanations\n• Cancer stages and severity\n• Treatment options and prevention\n\nUpload a CT scan image and run the analysis, then ask me about the results!",
+             False),
+            (['thank', 'thanks', 'appreciate'],
+             "You're welcome! Remember, always consult a qualified medical professional for actual diagnosis. I'm here to help you understand the AI's analysis. 😊",
+             False),
+
+            # ── Symptom questions ──
+            (['symptom', 'signs of lung cancer', 'how do i know'],
+             "Common symptoms of lung cancer include: persistent cough, coughing up blood (hemoptysis), shortness of breath, chest pain, hoarseness, unexplained weight loss, and fatigue. If you experience these, please consult a healthcare professional immediately.",
+             False),
+            (['adenocarcinoma'],
+             "Adenocarcinoma is the most common type of non-small cell lung cancer (NSCLC). It typically arises in the outer areas of the lungs and is often found before it has spread. It is more common in women and non-smokers.",
+             False),
+            (['squamous'],
+             "Squamous Cell Carcinoma is a type of non-small cell lung cancer that usually originates in the central bronchi. It is strongly linked to a history of smoking.",
+             False),
+            (['large cell'],
+             "Large Cell Carcinoma can appear in any part of the lung and tends to grow and spread quickly, making it harder to treat.",
+             False),
+            (['benign', 'not cancer'],
+             "A benign finding means no malignancy was detected. The lung tissue appears within normal parameters. Routine annual screening is still recommended.",
+             False),
+            (['malignant', 'is it cancer'],
+             "A malignant finding indicates the AI has detected patterns consistent with cancerous tissue. This must be confirmed by a qualified medical professional through biopsy.",
+             False),
+
+            # ── CT scan general ──
+            (['what is ct', 'ct scan', 'computed tomography'],
+             "A CT (Computed Tomography) scan uses X-rays to create detailed cross-sectional images of the lungs. It is the gold standard for detecting lung nodules and tumors early.",
+             False),
+            (['lime', 'superpixel'],
+             "LIME (Local Interpretable Model-agnostic Explanations) is an AI explanation technique that highlights which parts of the image most influenced the model's prediction by testing many small modifications to the image.",
+             False),
+            (['grad-cam', 'gradcam', 'grad cam'],
+             "Grad-CAM (Gradient-weighted Class Activation Mapping) generates a heatmap showing which regions of the CT scan the AI focused on to arrive at its classification.",
+             False),
+        ]
+
+        # ── Match intent ──
+        for triggers, answer, needs_image in intents:
+            if any(t in user_message for t in triggers):
+                if needs_image and not has_context:
+                    return jsonify({'response': 'Kindly upload your CT scan image and run the analysis first, then I can answer your question with specific results! 🔬'})
+                if answer:
+                    return jsonify({'response': answer})
+
+        # ── Fallback: check if it's a result question without context ──
+        result_words = ['result', 'report', 'scan', 'image', 'analysis', 'finding']
+        if any(w in user_message for w in result_words):
+            if has_context:
+                return jsonify({'response': f"Based on your latest analysis, the AI classified the image as **{pred}** with **{conf}%** confidence. Stage: **{stage}**. Location: **{location}**. Feel free to ask more specific questions!"})
+            else:
+                return jsonify({'response': 'Kindly upload your CT scan image and run the analysis first, then I can tell you about the results! 🔬'})
+
+        # ── Final fallback ──
+        return jsonify({'response': "I'm your AI Medical Assistant! I can help with:\n• Lung cancer types and subtypes\n• CT scan analysis results\n• Heatmaps and AI explanations\n• Cancer stages and treatments\n• Symptoms and prevention\n\nTry asking: 'What types of cancer can you detect?' or upload an image and ask about the results!"})
+
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
