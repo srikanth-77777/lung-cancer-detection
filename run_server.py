@@ -22,5 +22,5 @@ if __name__ == '__main__':
     print(f"Address: http://{host}:{port}")
     print(f"================================================================")
     
-    # Run the Waitress WSGI server
-    serve(app, host=host, port=port, threads=4)
+    # Run the Waitress WSGI server (1 thread to save RAM)
+    serve(app, host=host, port=port, threads=1)
