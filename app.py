@@ -8,6 +8,13 @@ Open: http://localhost:5000
 """
 
 import os
+import gc
+
+# Limit PyTorch memory before importing torch
+os.environ['OMP_NUM_THREADS'] = '1'
+os.environ['MKL_NUM_THREADS'] = '1'
+os.environ['OPENBLAS_NUM_THREADS'] = '1'
+
 import cv2
 import base64
 import numpy as np
@@ -157,42 +164,59 @@ def build_resnet50_subtype(num_classes=4):
 
 
 # ────────────────────────────────────────────────────────────────
-# LOAD MODELS AT STARTUP
+# LOAD MODELS AT STARTUP (Memory-optimized for 512MB)
 # ────────────────────────────────────────────────────────────────
-print("Loading models...")
+print("Loading models (memory-optimized)...")
 
 eff_model = build_resnet50().to(device)
 eff_model.load_state_dict(
     torch.load(EFF_WEIGHTS, map_location=device))
 eff_model.eval()
-print("[SUCCESS] ResNet50 loaded")
+eff_model.half()  # float16 — saves ~47MB RAM
+gc.collect()      # Free temp loading buffers
+print("[SUCCESS] ResNet50 loaded (float16)")
 
 dense_model = build_resnet50_subtype(num_classes=4).to(device)
 dense_model.load_state_dict(
     torch.load(DENSE_WEIGHTS, map_location=device))
 dense_model.eval()
-print("[SUCCESS] ResNet50 Subtype model loaded")
+dense_model.half()  # float16 — saves ~47MB RAM
+gc.collect()        # Free temp loading buffers
+print("[SUCCESS] ResNet50 Subtype loaded (float16)")
 
 # ── Grad-CAM instances ────────────────────────────────────────
 eff_gradcam   = GradCAM(eff_model,   model_type="resnet")
 dense_gradcam = GradCAM(dense_model, model_type="resnet")
-
 print("[SUCCESS] Grad-CAM ready")
 
-# ── LIME explainers ───────────────────────────────────────────
+# ── LIME explainers (lazy-loaded to save startup RAM) ─────────
 lime_transform = transforms.Compose([
     transforms.Resize((IMG_SIZE, IMG_SIZE)),
     transforms.ToTensor(),
     transforms.Normalize(mean=[0.485, 0.456, 0.406],
                          std=[0.229, 0.224, 0.225])
 ])
-lime_explainer = LimeExplainer(
-    dense_model, lime_transform, device, FOUR_CLASSES)
-lime_explainer_binary = LimeExplainer(
-    eff_model, lime_transform, device, BINARY_CLASSES)
-print("[SUCCESS] LIME explainers ready")
+_lime_explainer = None
+_lime_explainer_binary = None
 
-print("Server starting...")
+def get_lime_explainer():
+    global _lime_explainer
+    if _lime_explainer is None:
+        _lime_explainer = LimeExplainer(
+            dense_model, lime_transform, device, FOUR_CLASSES)
+        print("[LAZY] LIME 4-class explainer created")
+    return _lime_explainer
+
+def get_lime_explainer_binary():
+    global _lime_explainer_binary
+    if _lime_explainer_binary is None:
+        _lime_explainer_binary = LimeExplainer(
+            eff_model, lime_transform, device, BINARY_CLASSES)
+        print("[LAZY] LIME binary explainer created")
+    return _lime_explainer_binary
+
+gc.collect()
+print(f"[SUCCESS] Server starting... (memory optimized)")
 
 
 # ────────────────────────────────────────────────────────────────
@@ -232,7 +256,7 @@ def preprocess_image(image_bytes):
     ])
     img_rgb    = np.stack([img_enhanced, img_enhanced,
                             img_enhanced], axis=-1)
-    img_tensor = transform(img_rgb).unsqueeze(0).to(device)
+    img_tensor = transform(img_rgb).unsqueeze(0).to(device).half()  # float16 to match models
 
     return img_tensor, img_resized, img_enhanced
 
@@ -372,9 +396,11 @@ def analyze_binary():
         db.session.commit()
         result['db_id'] = diag.id
 
+        gc.collect()  # Free memory after inference
         return jsonify(result)
 
     except Exception as e:
+        gc.collect()
         return jsonify({'error': str(e)}), 500
 
 
@@ -468,9 +494,11 @@ def analyze_fourclass():
         db.session.commit()
         result['db_id'] = diag.id
 
+        gc.collect()  # Free memory after inference
         return jsonify(result)
 
     except Exception as e:
+        gc.collect()
         return jsonify({'error': str(e)}), 500
 
 
@@ -505,7 +533,7 @@ def explain_lime():
 
         # Run LIME
         pos_overlay, full_overlay, narrative = \
-            lime_explainer.explain(
+            get_lime_explainer().explain(
                 img_rgb, pred_idx,
                 num_samples=100, num_features=8
             )
@@ -557,7 +585,7 @@ def explain_lime_binary():
 
         # Run LIME
         pos_overlay, full_overlay, narrative = \
-            lime_explainer_binary.explain(
+            get_lime_explainer_binary().explain(
                 img_rgb, pred_idx,
                 num_samples=100, num_features=8
             )
