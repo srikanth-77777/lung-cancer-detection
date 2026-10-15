@@ -51,10 +51,10 @@ def ensure_models():
     Call this at application startup to ensure both model
     weight files are present on disk.
     """
-    model_url_1   = os.getenv("MODEL_URL_1", "")
-    model_url_2   = os.getenv("MODEL_URL_2", "")
+    model_url_1   = os.getenv("MODEL_URL_1", "https://huggingface.co/Srikanth77777/best_ResNet50_v5.pth/resolve/main/best_ResNet50_v5.pth")
+    model_url_2   = os.getenv("MODEL_URL_2", "https://huggingface.co/Srikanth77777/best_ResNet50_v5.pth/resolve/main/resnet50_chest_ct_95acc.pth")
     eff_weights   = os.getenv("EFF_WEIGHTS", "best_ResNet50_v5.pth")
-    dense_weights = os.getenv("DENSE_WEIGHTS", "resnet50_chest_ct_95acc_final.pth")
+    dense_weights = os.getenv("DENSE_WEIGHTS", "resnet50_chest_ct_95acc.pth")
 
     if not model_url_1 or not model_url_2:
         print("[WARNING] MODEL_URL_1 / MODEL_URL_2 not set. "

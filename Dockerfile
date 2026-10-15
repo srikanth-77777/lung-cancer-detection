@@ -16,9 +16,8 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy the rest of the application
 COPY . .
 
-# Expose the port (Hugging Face Spaces uses 7860 by default)
-EXPOSE 7860
-ENV PORT=7860
+# Expose port (standard container port)
+EXPOSE 8080
 ENV HOST=0.0.0.0
 
 # Start the application

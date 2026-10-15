@@ -75,8 +75,18 @@ with app.app_context():
     db.create_all()
 
 # ── Paths — load from environment or fallback ──────────────────
-EFF_WEIGHTS     = os.getenv("EFF_WEIGHTS", r"C:\MedicalProject\best_ResNet50_v5.pth")
-DENSE_WEIGHTS   = os.getenv("DENSE_WEIGHTS", r"C:\MedicalProject\chest_ct\resnet50_chest_ct_95acc_final.pth")
+def resolve_weight_path(env_var, default_name, local_fallback):
+    path = os.getenv(env_var, "")
+    if path and os.path.exists(path):
+        return path
+    if os.path.exists(default_name):
+        return default_name
+    if os.path.exists(local_fallback):
+        return local_fallback
+    return default_name
+
+EFF_WEIGHTS     = resolve_weight_path("EFF_WEIGHTS", "best_ResNet50_v5.pth", r"C:\MedicalProject\best_ResNet50_v5.pth")
+DENSE_WEIGHTS   = resolve_weight_path("DENSE_WEIGHTS", "resnet50_chest_ct_95acc.pth", r"C:\MedicalProject\chest_ct\resnet50_chest_ct_95acc_final.pth")
 IMG_SIZE        = 224
 
 # ── GPU ───────────────────────────────────────────────────────
@@ -168,17 +178,35 @@ def build_resnet50_subtype(num_classes=4):
 # ────────────────────────────────────────────────────────────────
 print("Loading models (memory-optimized)...")
 
+def smart_load_weights(model, path, device):
+    ckpt = torch.load(path, map_location=device)
+    if isinstance(ckpt, dict):
+        if "base_state" in ckpt and "head_state" in ckpt:
+            full_dict = {}
+            for k, v in ckpt["base_state"].items():
+                full_dict[k] = v
+            for k, v in ckpt["head_state"].items():
+                key_name = k if k.startswith("fc.") else f"fc.{k}"
+                full_dict[key_name] = v
+            msg = model.load_state_dict(full_dict, strict=False)
+            print(f"[LOAD] Loaded from base_state + head_state ({path}): {msg}")
+            return
+        elif "model_state_dict" in ckpt:
+            ckpt = ckpt["model_state_dict"]
+        elif "state_dict" in ckpt:
+            ckpt = ckpt["state_dict"]
+    msg = model.load_state_dict(ckpt, strict=False)
+    print(f"[LOAD] Loaded {path}: {msg}")
+
 eff_model = build_resnet50().to(device)
-eff_model.load_state_dict(
-    torch.load(EFF_WEIGHTS, map_location=device))
+smart_load_weights(eff_model, EFF_WEIGHTS, device)
 eff_model.eval()
 eff_model.half()  # float16 — saves ~47MB RAM
 gc.collect()      # Free temp loading buffers
 print("[SUCCESS] ResNet50 loaded (float16)")
 
 dense_model = build_resnet50_subtype(num_classes=4).to(device)
-dense_model.load_state_dict(
-    torch.load(DENSE_WEIGHTS, map_location=device))
+smart_load_weights(dense_model, DENSE_WEIGHTS, device)
 dense_model.eval()
 dense_model.half()  # float16 — saves ~47MB RAM
 gc.collect()        # Free temp loading buffers

@@ -14,7 +14,7 @@ load_dotenv()
 if __name__ == '__main__':
     # Read host and port from environment or default
     host = os.getenv("HOST", "0.0.0.0")
-    port = int(os.getenv("PORT", 5000))
+    port = int(os.getenv("PORT", 8080))
     
     print(f"================================================================")
     print(f"Starting Production WSGI Server (Waitress)...")
