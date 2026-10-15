@@ -201,16 +201,14 @@ def smart_load_weights(model, path, device):
 eff_model = build_resnet50().to(device)
 smart_load_weights(eff_model, EFF_WEIGHTS, device)
 eff_model.eval()
-eff_model.half()  # float16 — saves ~47MB RAM
-gc.collect()      # Free temp loading buffers
-print("[SUCCESS] ResNet50 loaded (float16)")
+gc.collect()
+print("[SUCCESS] ResNet50 loaded")
 
 dense_model = build_resnet50_subtype(num_classes=4).to(device)
 smart_load_weights(dense_model, DENSE_WEIGHTS, device)
 dense_model.eval()
-dense_model.half()  # float16 — saves ~47MB RAM
-gc.collect()        # Free temp loading buffers
-print("[SUCCESS] ResNet50 Subtype loaded (float16)")
+gc.collect()
+print("[SUCCESS] ResNet50 Subtype loaded")
 
 # ── Grad-CAM instances ────────────────────────────────────────
 eff_gradcam   = GradCAM(eff_model,   model_type="resnet")
@@ -284,7 +282,7 @@ def preprocess_image(image_bytes):
     ])
     img_rgb    = np.stack([img_enhanced, img_enhanced,
                             img_enhanced], axis=-1)
-    img_tensor = transform(img_rgb).unsqueeze(0).to(device).half()  # float16 to match models
+    img_tensor = transform(img_rgb).unsqueeze(0).to(device)
 
     return img_tensor, img_resized, img_enhanced
 
